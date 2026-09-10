@@ -9,7 +9,7 @@ import {
   ExternalLink,
   MessageSquare,
   Sparkles,
-  DollarSign
+  IndianRupee
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { ContactFormData } from '../utils/sendEmail';
@@ -26,7 +26,7 @@ export const ContactPage: React.FC = () => {
     company: '',
     phone: '',
     projectType: 'Web Application / SaaS',
-    budgetRange: '$5,000 – $15,000',
+    budgetRange: '₹5,000 – ₹12,000 / $60 – $145',
     timeline: '1–3 months',
     message: '',
   });
@@ -45,10 +45,12 @@ export const ContactPage: React.FC = () => {
   ];
 
   const budgetOptions = [
-    '<$5,000',
-    '$5,000 – $15,000',
-    '$15,000 – $30,000',
-    '$30,000+',
+    '₹2,500 – ₹5,000 / $30 – $60 (Starter / Single Page)',
+    '₹5,000 – ₹12,000 / $60 – $145 (Standard Business Website)',
+    '₹12,000 – ₹25,000 / $145 – $300 (Web App / UI/UX Design)',
+    '₹25,000 – ₹50,000 / $300 – $600 (Full SaaS / Dashboard)',
+    '₹50,000+ / $600+ (Advanced / Custom Scope)',
+    'Flexible / Open for Discussion',
   ];
 
   const timelineOptions = ['< 1 month', '1–3 months', '3–6 months', 'Flexible'];
@@ -186,7 +188,7 @@ export const ContactPage: React.FC = () => {
                         company: '',
                         phone: '',
                         projectType: 'Web Application / SaaS',
-                        budgetRange: '$5,000 – $15,000',
+                        budgetRange: '₹5,000 – ₹12,000 / $60 – $145',
                         timeline: '1–3 months',
                         message: '',
                       });
@@ -292,8 +294,8 @@ export const ContactPage: React.FC = () => {
                   {/* Budget */}
                   <div className="space-y-2">
                     <label className="text-xs font-mono font-semibold text-slate-700 block flex items-center gap-1">
-                      <DollarSign className="w-3.5 h-3.5 text-slate-500" />
-                      <span>Budget Estimate</span>
+                      <IndianRupee className="w-3.5 h-3.5 text-slate-500" />
+                      <span>Budget Estimate (INR ₹ / USD $)</span>
                     </label>
                     <select
                       value={formData.budgetRange}
