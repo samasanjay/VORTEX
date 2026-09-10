@@ -20,13 +20,70 @@ import {
 } from '../utils/sendEmail';
 
 export const ContactPage: React.FC = () => {
+  const projectTypes = [
+    'E-Commerce Experience',
+    'Web Application / SaaS',
+    'Mobile App (iOS / Android)',
+    'UI/UX & Design System',
+    'Dashboard & Analytics',
+    'AI & Spatial Interface',
+    'Landing Page / Single Page',
+  ];
+
+  const budgetOptionsMap: Record<string, string[]> = {
+    'E-Commerce Experience': [
+      '₹3,999 – ₹7,999 / $48 – $95 (Starter E-Commerce / Single Product)',
+      '₹8,000 – ₹15,999 / $95 – $190 (Multi-Product Store + Cart & Inventory)',
+      '₹16,000 – ₹32,000 / $190 – $385 (Custom E-Com Store + Payment Gateways)',
+      '₹32,000+ / $385+ (Headless Shopify / Next.js Marketplace)',
+      'Flexible / Custom Scope',
+    ],
+    'Web Application / SaaS': [
+      '₹6,999 – ₹14,999 / $85 – $180 (MVP / Core Feature Web App)',
+      '₹15,000 – ₹29,999 / $180 – $360 (Full-Stack Web App & Database)',
+      '₹30,000 – ₹55,000 / $360 – $660 (Multi-Tenant SaaS with Auth & Billing)',
+      '₹55,000+ / $660+ (Enterprise Cloud Software)',
+      'Flexible / Custom Scope',
+    ],
+    'Mobile App (iOS / Android)': [
+      '₹9,999 – ₹19,999 / $120 – $240 (Cross-Platform MVP App)',
+      '₹20,000 – ₹38,000 / $240 – $460 (Feature-Rich iOS + Android App)',
+      '₹38,000 – ₹70,000+ / $460 – $850+ (Advanced App + Backend APIs)',
+      'Flexible / Custom Scope',
+    ],
+    'UI/UX & Design System': [
+      '₹2,499 – ₹5,999 / $30 – $72 (Figma Prototype & Wireframes)',
+      '₹6,000 – ₹12,999 / $72 – $155 (Complete Web/App UI Screens)',
+      '₹13,000 – ₹24,999 / $155 – $300 (Design System & Reusable Components)',
+      'Flexible / Custom Scope',
+    ],
+    'Dashboard & Analytics': [
+      '₹4,999 – ₹11,999 / $60 – $145 (Interactive Charts & Metrics)',
+      '₹12,000 – ₹24,999 / $145 – $300 (Admin Dashboard & Role Management)',
+      '₹25,000 – ₹48,000+ / $300 – $580+ (Real-Time Analytics Suite)',
+      'Flexible / Custom Scope',
+    ],
+    'AI & Spatial Interface': [
+      '₹6,999 – ₹15,999 / $85 – $190 (AI Assistant / Chatbot Integration)',
+      '₹16,000 – ₹35,000 / $190 – $420 (Three.js / 3D Web Experience)',
+      '₹35,000 – ₹65,000+ / $420 – $780+ (Custom AI Model Pipeline & 3D UI)',
+      'Flexible / Custom Scope',
+    ],
+    'Landing Page / Single Page': [
+      '₹1,999 – ₹3,999 / $25 – $48 (Clean Modern Single Page)',
+      '₹4,000 – ₹7,999 / $48 – $95 (Interactive Promo & 3D Hero)',
+      '₹8,000 – ₹14,999 / $95 – $180 (High-Conversion Product Showcase)',
+      'Flexible / Custom Scope',
+    ],
+  };
+
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
     company: '',
     phone: '',
-    projectType: 'Web Application / SaaS',
-    budgetRange: '₹5,000 – ₹12,000 / $60 – $145',
+    projectType: 'E-Commerce Experience',
+    budgetRange: '₹3,999 – ₹7,999 / $48 – $95 (Starter E-Commerce / Single Product)',
     timeline: '1–3 months',
     message: '',
   });
@@ -35,23 +92,14 @@ export const ContactPage: React.FC = () => {
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [statusMessage, setStatusMessage] = useState<string>('');
 
-  const projectTypes = [
-    'Web Application / SaaS',
-    'E-Commerce Experience',
-    'Mobile App (iOS / Android)',
-    'UI/UX & Design System',
-    'Dashboard & Analytics',
-    'AI & Spatial Interface',
-  ];
-
-  const budgetOptions = [
-    '₹2,500 – ₹5,000 / $30 – $60 (Starter / Single Page)',
-    '₹5,000 – ₹12,000 / $60 – $145 (Standard Business Website)',
-    '₹12,000 – ₹25,000 / $145 – $300 (Web App / UI/UX Design)',
-    '₹25,000 – ₹50,000 / $300 – $600 (Full SaaS / Dashboard)',
-    '₹50,000+ / $600+ (Advanced / Custom Scope)',
-    'Flexible / Open for Discussion',
-  ];
+  const handleProjectTypeSelect = (type: string) => {
+    const options = budgetOptionsMap[type] || budgetOptionsMap['Web Application / SaaS'];
+    setFormData((prev) => ({
+      ...prev,
+      projectType: type,
+      budgetRange: options[0],
+    }));
+  };
 
   const timelineOptions = ['< 1 month', '1–3 months', '3–6 months', 'Flexible'];
 
@@ -187,8 +235,8 @@ export const ContactPage: React.FC = () => {
                         email: '',
                         company: '',
                         phone: '',
-                        projectType: 'Web Application / SaaS',
-                        budgetRange: '₹5,000 – ₹12,000 / $60 – $145',
+                        projectType: 'E-Commerce Experience',
+                        budgetRange: '₹3,999 – ₹7,999 / $48 – $95 (Starter E-Commerce / Single Product)',
                         timeline: '1–3 months',
                         message: '',
                       });
@@ -276,7 +324,7 @@ export const ContactPage: React.FC = () => {
                       <button
                         type="button"
                         key={type}
-                        onClick={() => setFormData({ ...formData, projectType: type })}
+                        onClick={() => handleProjectTypeSelect(type)}
                         className={`p-2.5 rounded-xl text-left text-xs font-medium border transition-colors ${
                           formData.projectType === type
                             ? 'bg-blue-50 border-blue-300 text-blue-700 font-semibold shadow-xs'
@@ -293,16 +341,21 @@ export const ContactPage: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Budget */}
                   <div className="space-y-2">
-                    <label className="text-xs font-mono font-semibold text-slate-700 block flex items-center gap-1">
-                      <IndianRupee className="w-3.5 h-3.5 text-slate-500" />
-                      <span>Budget Estimate (INR ₹ / USD $)</span>
-                    </label>
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-mono font-semibold text-slate-700 block flex items-center gap-1">
+                        <IndianRupee className="w-3.5 h-3.5 text-slate-500" />
+                        <span>Budget Estimate (INR ₹ / USD $)</span>
+                      </label>
+                      <span className="text-[10px] font-mono text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
+                        Tailored for {formData.projectType.split(' ')[0]}
+                      </span>
+                    </div>
                     <select
                       value={formData.budgetRange}
                       onChange={(e) => setFormData({ ...formData, budgetRange: e.target.value })}
                       className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white"
                     >
-                      {budgetOptions.map((b) => (
+                      {(budgetOptionsMap[formData.projectType] || budgetOptionsMap['Web Application / SaaS']).map((b) => (
                         <option key={b} value={b}>
                           {b}
                         </option>
