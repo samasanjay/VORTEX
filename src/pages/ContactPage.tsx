@@ -21,58 +21,61 @@ import {
 
 export const ContactPage: React.FC = () => {
   const projectTypes = [
-    'E-Commerce Experience',
-    'Web Application / SaaS',
-    'Mobile App (iOS / Android)',
-    'UI/UX & Design System',
-    'Dashboard & Analytics',
-    'AI & Spatial Interface',
-    'Landing Page / Single Page',
+    'Basic Business Website',
+    'Professional Business Website',
+    'E-commerce Website',
+    'Website + Lead System',
+    'Basic Business Automation',
+    'AI Chatbot / AI Solutions',
+    'Logo & Branding',
+    'Small Landing Page',
+    'Custom / Complex Projects',
   ];
 
   const budgetOptionsMap: Record<string, string[]> = {
-    'E-Commerce Experience': [
-      '₹4,999 – ₹9,999 / $60 – $120 (Starter Online Store)',
-      '₹10,000 – ₹18,000 / $120 – $220 (Standard E-Commerce + Payment Gateway)',
-      '₹18,000 – ₹30,000 / $220 – $360 (Advanced Custom Store + Inventory)',
-      '₹30,000+ / $360+ (Full Custom Marketplace)',
+    'Basic Business Website': [
+      '₹4,000 – ₹6,000 / $48 – $72 (Starter 1–3 Pages)',
+      '₹6,000 – ₹8,000 / $72 – $95 (Complete Basic Business Web)',
       'Flexible / Open for Discussion',
     ],
-    'Web Application / SaaS': [
-      '₹8,000 – ₹15,000 / $100 – $180 (Web App MVP / Core Features)',
-      '₹15,000 – ₹28,000 / $180 – $340 (Full Web Application & Database)',
-      '₹28,000 – ₹45,000 / $340 – $540 (Complete SaaS Platform + Auth)',
-      '₹45,000+ / $540+ (Custom Enterprise Platform)',
+    'Professional Business Website': [
+      '₹7,000 – ₹9,500 / $85 – $115 (Standard Multi-Page Business Web)',
+      '₹9,500 – ₹12,000 / $115 – $145 (Premium Custom Business Portal)',
       'Flexible / Open for Discussion',
     ],
-    'Mobile App (iOS / Android)': [
-      '₹10,000 – ₹18,000 / $120 – $220 (Starter Mobile App / MVP)',
-      '₹18,000 – ₹32,000 / $220 – $390 (Standard iOS & Android App)',
-      '₹32,000 – ₹55,000+ / $390 – $660+ (Full-Featured Mobile Application)',
+    'E-commerce Website': [
+      '₹10,000 – ₹14,000 / $120 – $170 (Starter Online Store + Payment Gateway)',
+      '₹14,000 – ₹18,000 / $170 – $220 (Full Product Catalog + Cart & Orders)',
       'Flexible / Open for Discussion',
     ],
-    'UI/UX & Design System': [
-      '₹2,999 – ₹6,500 / $35 – $80 (Figma Wireframes & Prototype)',
-      '₹6,500 – ₹12,500 / $80 – $150 (Complete UI/UX Screen Designs)',
-      '₹12,500 – ₹22,000+ / $150 – $270+ (Full Design System & Component Library)',
+    'Website + Lead System': [
+      '₹10,000 – ₹14,000 / $120 – $170 (High-Conversion Lead Funnel)',
+      '₹14,000 – ₹18,000 / $170 – $220 (Complete Lead Engine + CRM Alerts)',
       'Flexible / Open for Discussion',
     ],
-    'Dashboard & Analytics': [
-      '₹5,000 – ₹10,000 / $60 – $120 (Admin Dashboard & Basic Charts)',
-      '₹10,000 – ₹20,000 / $120 – $240 (Interactive Analytics Portal)',
-      '₹20,000 – ₹35,000+ / $240 – $420+ (Advanced Real-Time Data Dashboard)',
+    'Basic Business Automation': [
+      '₹5,000 – ₹7,500 / $60 – $90 (Workflow Automation & Lead Sync)',
+      '₹7,500 – ₹10,000 / $90 – $120 (Multi-App Integration & WhatsApp/Email)',
       'Flexible / Open for Discussion',
     ],
-    'AI & Spatial Interface': [
-      '₹6,000 – ₹12,000 / $75 – $145 (AI Chatbot & Smart Integration)',
-      '₹12,000 – ₹25,000 / $145 – $300 (Interactive 3D / WebGL Experience)',
-      '₹25,000 – ₹45,000+ / $300 – $540+ (Custom AI & 3D Interactive Web)',
+    'AI Chatbot / AI Solutions': [
+      '₹8,000 – ₹13,000 / $95 – $155 (Smart Website AI Assistant)',
+      '₹13,000 – ₹18,000 / $155 – $220 (Custom Knowledge Base & Lead Bot)',
       'Flexible / Open for Discussion',
     ],
-    'Landing Page / Single Page': [
-      '₹2,499 – ₹4,999 / $30 – $60 (Clean Modern Landing Page)',
-      '₹5,000 – ₹8,999 / $60 – $110 (High-Converting Promo Page with Animations)',
-      '₹9,000 – ₹15,000 / $110 – $180 (Full Marketing Sales Page & Leads)',
+    'Logo & Branding': [
+      '₹2,500 – ₹4,000 / $30 – $48 (Core Logo & Color Palette)',
+      '₹4,000 – ₹6,000 / $48 – $72 (Complete Brand Identity & Guidelines)',
+      'Flexible / Open for Discussion',
+    ],
+    'Small Landing Page': [
+      '₹3,000 – ₹4,500 / $36 – $55 (Single-Product / Promo Page)',
+      '₹4,500 – ₹6,000 / $55 – $72 (Interactive High-Speed Landing Page)',
+      'Flexible / Open for Discussion',
+    ],
+    'Custom / Complex Projects': [
+      '₹15,000 – ₹22,000 / $180 – $265 (Custom Web App / Portal MVP)',
+      '₹22,000 – ₹30,000+ / $265 – $360+ (Full Custom System & Database)',
       'Flexible / Open for Discussion',
     ],
   };
@@ -82,8 +85,8 @@ export const ContactPage: React.FC = () => {
     email: '',
     company: '',
     phone: '',
-    projectType: 'E-Commerce Experience',
-    budgetRange: '₹4,999 – ₹9,999 / $60 – $120 (Starter Online Store)',
+    projectType: 'Basic Business Website',
+    budgetRange: '₹4,000 – ₹6,000 / $48 – $72 (Starter 1–3 Pages)',
     timeline: '1–3 months',
     message: '',
   });
@@ -93,7 +96,7 @@ export const ContactPage: React.FC = () => {
   const [statusMessage, setStatusMessage] = useState<string>('');
 
   const handleProjectTypeSelect = (type: string) => {
-    const options = budgetOptionsMap[type] || budgetOptionsMap['Web Application / SaaS'];
+    const options = budgetOptionsMap[type] || budgetOptionsMap['Basic Business Website'];
     setFormData((prev) => ({
       ...prev,
       projectType: type,
@@ -235,8 +238,8 @@ export const ContactPage: React.FC = () => {
                         email: '',
                         company: '',
                         phone: '',
-                        projectType: 'E-Commerce Experience',
-                        budgetRange: '₹4,999 – ₹9,999 / $60 – $120 (Starter Online Store)',
+                        projectType: 'Basic Business Website',
+                        budgetRange: '₹4,000 – ₹6,000 / $48 – $72 (Starter 1–3 Pages)',
                         timeline: '1–3 months',
                         message: '',
                       });

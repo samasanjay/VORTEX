@@ -55,7 +55,7 @@ export async function sendInquiryEmail(data: ContactFormData): Promise<SendEmail
     } else if (result.message && result.message.includes('Activation')) {
       return {
         success: true,
-        message: `Inquiry received! FormSubmit activation link sent to ${OFFICIAL_STUDIO_EMAIL}. Click once in Gmail to enable automatic delivery.`,
+        message: `Inquiry received! Check ${OFFICIAL_STUDIO_EMAIL} inbox to activate automated forwarding.`,
       };
     } else {
       return {
