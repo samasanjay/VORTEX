@@ -11,7 +11,7 @@ export const FeaturedWork: React.FC<FeaturedWorkProps> = ({ projects, onSelectPr
   const featured = projects.filter((p) => ['velora', 'taskflow', 'finmate'].includes(p.id));
 
   return (
-    <section className="py-24 border-t border-slate-200/80 bg-white">
+    <section id="featured" className="py-24 border-t border-slate-200/80 bg-white">
       <div className="container-vortex">
         {/* Editorial Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-slate-200">

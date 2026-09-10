@@ -1,150 +1,129 @@
 import React, { useState, useEffect } from 'react';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import { ArrowUpRight, Menu, X } from 'lucide-react';
 
-interface NavbarProps {
-  onOpenExplore?: () => void;
-}
-
-export const Navbar: React.FC<NavbarProps> = ({ onOpenExplore }) => {
+export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
-
-      const sections = ['work', 'lab', 'archive', 'system', 'about'];
-      const current = sections.find((section) => {
-        const el = document.getElementById(section);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          return rect.top <= 200 && rect.bottom >= 200;
-        }
-        return false;
-      });
-      if (current) {
-        setActiveSection(current);
-      } else if (window.scrollY < 200) {
-        setActiveSection('home');
-      }
+      setScrolled(window.scrollY > 20);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
   const navLinks = [
-    { label: 'WORK', href: '#work', id: 'work' },
-    { label: 'LAB', href: '#lab', id: 'lab' },
-    { label: 'UI ARCHIVE', href: '#archive', id: 'archive' },
-    { label: 'DESIGN SYSTEM', href: '#system', id: 'system' },
-    { label: 'ABOUT', href: '#about', id: 'about' },
+    { label: 'Home', path: '/' },
+    { label: 'Work', path: '/work' },
+    { label: 'UI Archive', path: '/ui-archive' },
+    { label: 'Design System', path: '/design-system' },
+    { label: 'About', path: '/about' },
   ];
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'glass-nav py-3.5 shadow-sm' : 'bg-transparent py-5'
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
+        scrolled
+          ? 'glass-nav py-3.5 shadow-sm'
+          : 'bg-white/90 backdrop-blur-md py-4 border-b border-slate-200/80'
       }`}
     >
       <div className="container-vortex flex items-center justify-between">
         {/* Brand Logo */}
-        <a
-          href="#"
+        <Link
+          to="/"
           className="flex items-center gap-3 group text-decoration-none"
-          data-cursor="HOME"
           aria-label="WORKVORTEX home"
         >
-          <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 p-[1.5px] shadow-md shadow-blue-500/15 group-hover:shadow-blue-500/30 transition-shadow">
-            <div className="w-full h-full bg-white rounded-[10px] flex items-center justify-center">
-              <svg viewBox="0 0 100 100" className="w-5 h-5 fill-none stroke-blue-600 stroke-[9] stroke-linecap-round stroke-linejoin-round group-hover:stroke-blue-500 transition-colors">
-                <path d="M 20 28 L 36 76 L 50 46 L 64 76 L 80 28" />
-              </svg>
-            </div>
+          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:bg-blue-700 transition-colors">
+            <svg viewBox="0 0 24 24" className="w-4 h-4 fill-none stroke-white stroke-2 stroke-linecap-round stroke-linejoin-round">
+              <path d="M4 6l4 12 4-8 4 8 4-12" />
+            </svg>
           </div>
-          <div>
-            <div className="font-display font-extrabold text-lg sm:text-xl tracking-tight text-slate-900 flex items-center gap-1.5">
+          <div className="flex flex-col">
+            <span className="font-display font-bold text-lg tracking-tight text-slate-900 leading-tight">
               WORKVORTEX
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
-            </div>
-            <div className="text-[10px] font-mono tracking-widest text-slate-500 hidden sm:block font-semibold">
-              BUILD. AUTOMATE. SCALE.
-            </div>
+            </span>
+            <span className="text-[10px] font-mono tracking-wider text-slate-500 font-semibold uppercase leading-none">
+              Build. Automate. Scale.
+            </span>
           </div>
-        </a>
+        </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-1 p-1 rounded-full bg-white/90 border border-slate-200/80 shadow-sm backdrop-blur-md">
-          {navLinks.map((link) => {
-            const isActive = activeSection === link.id;
-            return (
-              <a
-                key={link.id}
-                href={link.href}
-                data-cursor="NAV"
-                className={`px-4 py-1.5 rounded-full font-mono text-xs font-semibold tracking-wider transition-all duration-200 ${
+        <nav className="hidden md:flex items-center gap-1.5">
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.path}
+              to={link.path}
+              className={({ isActive }) =>
+                `px-3.5 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                   isActive
-                    ? 'text-blue-700 bg-blue-50 border border-blue-200 shadow-sm'
+                    ? 'text-blue-600 bg-blue-50 font-semibold'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
-                }`}
-              >
-                {link.label}
-              </a>
-            );
-          })}
+                }`
+              }
+            >
+              {link.label}
+            </NavLink>
+          ))}
         </nav>
 
         {/* Right CTA */}
-        <div className="hidden md:flex items-center gap-3">
-          <a
-            href="#work"
-            onClick={onOpenExplore}
-            data-cursor="EXPLORE"
-            className="btn-primary text-xs py-2.5 px-5 font-mono tracking-wider group"
+        <div className="hidden sm:flex items-center gap-3">
+          <Link
+            to="/contact"
+            className="btn-primary text-xs py-2 px-4.5 font-medium flex items-center gap-1.5 shadow-sm"
           >
-            <span>EXPLORE</span>
-            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-          </a>
+            <span>Start a Project</span>
+            <ArrowUpRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
 
         {/* Mobile Hamburger Toggle */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 rounded-lg bg-white border border-slate-200 text-slate-700 hover:text-slate-900 shadow-sm"
+          className="md:hidden p-2 rounded-lg bg-slate-50 border border-slate-200 text-slate-700 hover:text-slate-900"
           aria-label="Toggle navigation menu"
         >
-          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </div>
 
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden glass-nav border-b border-slate-200 px-6 py-6 mt-3 space-y-3 bg-white/98 shadow-xl">
-          <div className="text-xs font-mono text-slate-500 uppercase tracking-widest px-2 mb-2 font-semibold">
-            Navigation
-          </div>
+        <div className="md:hidden glass-nav border-b border-slate-200 px-6 py-5 mt-2 space-y-2 bg-white shadow-xl">
           {navLinks.map((link) => (
-            <a
-              key={link.id}
-              href={link.href}
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-4 py-3 rounded-lg text-sm font-mono font-semibold text-slate-800 hover:bg-slate-100 hover:text-blue-600 border border-transparent hover:border-slate-200 transition-colors"
+            <NavLink
+              key={link.path}
+              to={link.path}
+              className={({ isActive }) =>
+                `block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'text-blue-600 bg-blue-50 font-semibold'
+                    : 'text-slate-800 hover:bg-slate-50'
+                }`
+              }
             >
               {link.label}
-            </a>
+            </NavLink>
           ))}
-          <div className="pt-3 border-t border-slate-200">
-            <a
-              href="#work"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenExplore?.();
-              }}
-              className="btn-primary w-full text-xs py-3 font-mono tracking-wider justify-center"
+          <div className="pt-3 border-t border-slate-100">
+            <Link
+              to="/contact"
+              className="btn-primary w-full text-xs py-2.5 justify-center"
             >
-              EXPLORE THE WORK →
-            </a>
+              Start a Project →
+            </Link>
           </div>
         </div>
       )}
