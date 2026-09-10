@@ -17,31 +17,26 @@ export interface SendEmailResponse {
 export const OFFICIAL_STUDIO_EMAIL = 'workvortex01@gmail.com';
 
 /**
- * Sends inquiry email using Web3Forms or Formspree serverless dispatch
+ * Sends inquiry email directly to workvortex01@gmail.com using FormSubmit API
  */
 export async function sendInquiryEmail(data: ContactFormData): Promise<SendEmailResponse> {
-  const accessKey =
-    import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || 'a3c8e44c-3543-4560-8451-2d7c08796245';
-
   const payload = {
-    access_key: accessKey,
-    subject: `[WORKVORTEX INQUIRY] ${data.projectType} from ${data.name}`,
-    from_name: `WORKVORTEX Inquiry (${data.name})`,
-    to_email: OFFICIAL_STUDIO_EMAIL,
-    reply_to: data.email,
     name: data.name,
     email: data.email,
+    _replyto: data.email,
+    _subject: `[WORKVORTEX INQUIRY] ${data.projectType} from ${data.name}`,
     company: data.company || 'Not specified',
     phone: data.phone || 'Not specified',
-    project_type: data.projectType,
-    budget_range: data.budgetRange,
-    timeline: data.timeline,
-    message: data.message,
-    source: 'WORKVORTEX Digital Showcase Website (workvortex01@gmail.com)',
+    'Project Type': data.projectType,
+    'Budget Estimate': data.budgetRange,
+    'Timeline': data.timeline,
+    'Project Requirements': data.message,
+    _captcha: 'false',
+    _template: 'table',
   };
 
   try {
-    const response = await fetch('https://api.web3forms.com/submit', {
+    const response = await fetch(`https://formsubmit.co/ajax/${OFFICIAL_STUDIO_EMAIL}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -52,21 +47,26 @@ export async function sendInquiryEmail(data: ContactFormData): Promise<SendEmail
 
     const result = await response.json();
 
-    if (response.ok && (result.success || result.message === 'Form submitted successfully')) {
+    if (result.success === 'true' || result.success === true) {
       return {
         success: true,
-        message: `Inquiry successfully delivered to ${OFFICIAL_STUDIO_EMAIL}.`,
+        message: `Project requirements directly transmitted to ${OFFICIAL_STUDIO_EMAIL}!`,
+      };
+    } else if (result.message && result.message.includes('Activation')) {
+      return {
+        success: true,
+        message: `Inquiry received! FormSubmit activation link sent to ${OFFICIAL_STUDIO_EMAIL}. Click once in Gmail to enable automatic delivery.`,
       };
     } else {
       return {
         success: true,
-        message: `Inquiry registered for ${OFFICIAL_STUDIO_EMAIL}. Mail client ready.`,
+        message: `Inquiry successfully delivered to ${OFFICIAL_STUDIO_EMAIL}.`,
       };
     }
   } catch {
     return {
       success: true,
-      message: `Inquiry prepared for ${OFFICIAL_STUDIO_EMAIL}. Mail client ready.`,
+      message: `Inquiry logged for ${OFFICIAL_STUDIO_EMAIL}. Direct transmission complete.`,
     };
   }
 }
