@@ -32,22 +32,21 @@ export const DigitalLab: React.FC = () => {
     const group = new THREE.Group();
     scene.add(group);
 
-    // 1. Digital Geodesic Icosahedron Sphere
+    // 1. Digital Geodesic Icosahedron Sphere (Cobalt Chrome on Light Canvas)
     const sphereGeom = new THREE.IcosahedronGeometry(1.8, 4);
     const sphereMat = new THREE.MeshStandardMaterial({
-      color: 0x0a1128,
-      roughness: 0.1,
-      metalness: 0.9,
-      wireframe: false,
+      color: 0x2563eb,
+      roughness: 0.15,
+      metalness: 0.85,
     });
     const sphereMesh = new THREE.Mesh(sphereGeom, sphereMat);
     group.add(sphereMesh);
 
     const wireMat = new THREE.MeshBasicMaterial({
-      color: 0x06b6d4,
+      color: 0x0284c7,
       wireframe: true,
       transparent: true,
-      opacity: 0.45,
+      opacity: 0.5,
     });
     const wireMesh = new THREE.Mesh(sphereGeom, wireMat);
     wireMesh.scale.set(1.02, 1.02, 1.02);
@@ -59,7 +58,7 @@ export const DigitalLab: React.FC = () => {
     group.add(nodeGroup);
 
     const smallGeom = new THREE.BoxGeometry(0.12, 0.12, 0.12);
-    const smallMat = new THREE.MeshBasicMaterial({ color: 0x8b5cf6 });
+    const smallMat = new THREE.MeshBasicMaterial({ color: 0x7c3aed });
 
     for (let i = 0; i < nodeCount; i++) {
       const node = new THREE.Mesh(smallGeom, smallMat);
@@ -80,28 +79,30 @@ export const DigitalLab: React.FC = () => {
     }
     dustGeom.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
     const dustMat = new THREE.PointsMaterial({
-      size: 0.035,
-      color: 0x60a5fa,
+      size: 0.04,
+      color: 0x2563eb,
       transparent: true,
-      opacity: 0.6,
-      blending: THREE.AdditiveBlending,
+      opacity: 0.7,
     });
     const dust = new THREE.Points(dustGeom, dustMat);
     scene.add(dust);
 
     // Lights
-    const ambLight = new THREE.AmbientLight(0xffffff, 0.6);
+    const ambLight = new THREE.AmbientLight(0xffffff, 1.3);
     scene.add(ambLight);
 
-    const pLight1 = new THREE.PointLight(0x06b6d4, 4, 30);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.4);
+    dirLight.position.set(5, 10, 7);
+    scene.add(dirLight);
+
+    const pLight1 = new THREE.PointLight(0x0284c7, 3, 30);
     pLight1.position.set(4, 4, 4);
     scene.add(pLight1);
 
-    const pLight2 = new THREE.PointLight(0x8b5cf6, 3, 30);
+    const pLight2 = new THREE.PointLight(0x7c3aed, 2.5, 30);
     pLight2.position.set(-4, -4, 2);
     scene.add(pLight2);
 
-    // Mouse Interaction
     let mouseX = 0;
     let mouseY = 0;
     const handleMove = (e: MouseEvent) => {
@@ -121,7 +122,6 @@ export const DigitalLab: React.FC = () => {
     };
     window.addEventListener('resize', handleResize);
 
-    // Animation Loop
     let animId: number;
     let clock = new THREE.Clock();
 
@@ -157,18 +157,18 @@ export const DigitalLab: React.FC = () => {
   }, [particleDensity]);
 
   return (
-    <section id="lab" className="py-24 bg-[#05070D] border-t border-slate-800 relative overflow-hidden bg-lab-gradient">
+    <section id="lab" className="py-24 bg-white border-t border-slate-200 relative overflow-hidden bg-lab-gradient">
       <div className="container-vortex relative z-10">
         {/* Section Header */}
         <div className="max-w-3xl mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-950/70 border border-cyan-800/50 text-xs font-mono text-cyan-400">
-            <Sparkles className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-50 border border-cyan-200 text-xs font-mono text-cyan-800 font-semibold">
+            <Sparkles className="w-3.5 h-3.5 text-cyan-600" />
             <span>INTERACTIVE 3D LAB</span>
           </div>
-          <h2 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight">
+          <h2 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl text-slate-900 tracking-tight">
             DIGITAL LAB
           </h2>
-          <p className="text-slate-300 font-body text-base sm:text-lg">
+          <p className="text-slate-600 font-body text-base sm:text-lg">
             Experiments beyond the interface. Exploring spatial geometry, real-time shaders, and reactive 3D computing environments.
           </p>
         </div>
@@ -177,19 +177,19 @@ export const DigitalLab: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           
           {/* WebGL Canvas & Live Parameters */}
-          <div className="lg:col-span-8 relative rounded-3xl border border-slate-800 bg-[#070A14] overflow-hidden shadow-2xl">
+          <div className="lg:col-span-8 relative rounded-3xl border border-slate-200 bg-[#F8FAFC] overflow-hidden shadow-lg">
             {/* Top HUD Bar */}
-            <div className="px-6 py-4 bg-slate-900/90 border-b border-slate-800 flex flex-wrap items-center justify-between gap-4">
+            <div className="px-6 py-4 bg-white/95 border-b border-slate-200 flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <span className="badge-concept">
                   EXPERIMENTAL CONCEPT
                 </span>
-                <span className="text-xs font-mono text-slate-400 hidden sm:inline-block">
+                <span className="text-xs font-mono text-slate-600 hidden sm:inline-block font-medium">
                   EXPERIMENT 04-X: TOPOLOGICAL VORTEX SPHERE
                 </span>
               </div>
-              <div className="flex items-center gap-2 text-[11px] font-mono text-cyan-400">
-                <Radio className="w-3.5 h-3.5 animate-pulse" />
+              <div className="flex items-center gap-2 text-[11px] font-mono text-cyan-700 font-bold">
+                <Radio className="w-3.5 h-3.5 animate-pulse text-cyan-600" />
                 <span>GPU SHADER: LIVE</span>
               </div>
             </div>
@@ -203,9 +203,9 @@ export const DigitalLab: React.FC = () => {
             />
 
             {/* Bottom Interactive Parameter Bar */}
-            <div className="p-4 sm:p-6 bg-slate-900/95 border-t border-slate-800 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
-                <Sliders className="w-4 h-4 text-cyan-400" />
+            <div className="p-4 sm:p-6 bg-white border-t border-slate-200 flex flex-wrap items-center justify-between gap-4 shadow-inner">
+              <div className="flex items-center gap-2 text-xs font-mono text-slate-700 font-semibold">
+                <Sliders className="w-4 h-4 text-cyan-600" />
                 <span>LIVE PARAMETERS:</span>
               </div>
 
@@ -215,16 +215,16 @@ export const DigitalLab: React.FC = () => {
                   onClick={() => setWireframe(!wireframe)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-colors flex items-center gap-1.5 ${
                     wireframe
-                      ? 'bg-cyan-600/30 text-cyan-300 border border-cyan-500/40'
-                      : 'bg-slate-950 text-slate-400 border border-slate-800'
+                      ? 'bg-cyan-50 text-cyan-800 border border-cyan-300 shadow-sm'
+                      : 'bg-slate-100 text-slate-600 border border-slate-200'
                   }`}
                 >
-                  <Box className="w-3 h-3" />
+                  <Box className="w-3 h-3 text-cyan-600" />
                   <span>Wireframe {wireframe ? 'ON' : 'OFF'}</span>
                 </button>
 
                 {/* Speed Slider */}
-                <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
+                <div className="flex items-center gap-2 text-xs font-mono text-slate-700 font-medium">
                   <span>Speed:</span>
                   <input
                     type="range"
@@ -233,15 +233,15 @@ export const DigitalLab: React.FC = () => {
                     step="0.5"
                     value={rotationSpeed}
                     onChange={(e) => setRotationSpeed(parseFloat(e.target.value))}
-                    className="w-20 accent-cyan-400 cursor-pointer"
+                    className="w-20 accent-cyan-600 cursor-pointer"
                   />
-                  <span className="text-cyan-400 w-6">{rotationSpeed}x</span>
+                  <span className="text-cyan-700 font-bold w-6">{rotationSpeed}x</span>
                 </div>
 
                 {/* Density */}
                 <button
                   onClick={() => setParticleDensity(particleDensity === 'high' ? 'medium' : 'high')}
-                  className="px-3 py-1.5 rounded-lg text-xs font-mono bg-slate-950 text-slate-400 border border-slate-800 hover:text-white"
+                  className="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200 shadow-sm"
                 >
                   Particles: {particleDensity.toUpperCase()}
                 </button>
@@ -251,35 +251,35 @@ export const DigitalLab: React.FC = () => {
 
           {/* Right Column: Lab Experiments Index */}
           <div className="lg:col-span-4 space-y-4">
-            <div className="p-6 rounded-2xl bg-slate-900/70 border border-slate-800 space-y-3">
-              <div className="flex items-center justify-between text-xs font-mono text-slate-400">
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 space-y-3 shadow-sm hover:border-slate-300 transition-all">
+              <div className="flex items-center justify-between text-xs font-mono text-slate-500 font-semibold">
                 <span>EXP-01</span>
-                <span className="text-cyan-400">THREE.JS / SHADERS</span>
+                <span className="text-cyan-700 font-bold">THREE.JS / SHADERS</span>
               </div>
-              <h4 className="font-display font-bold text-lg text-white">Topological Mesh Deformer</h4>
-              <p className="text-xs text-slate-300 font-body leading-relaxed">
+              <h4 className="font-display font-bold text-lg text-slate-900">Topological Mesh Deformer</h4>
+              <p className="text-xs text-slate-600 font-body leading-relaxed">
                 Real-time GPU vertex displacement evaluating dynamic mathematical vortex algorithms.
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-slate-900/70 border border-slate-800 space-y-3">
-              <div className="flex items-center justify-between text-xs font-mono text-slate-400">
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 space-y-3 shadow-sm hover:border-slate-300 transition-all">
+              <div className="flex items-center justify-between text-xs font-mono text-slate-500 font-semibold">
                 <span>EXP-02</span>
-                <span className="text-purple-400">WEB AUDIO API</span>
+                <span className="text-purple-700 font-bold">WEB AUDIO API</span>
               </div>
-              <h4 className="font-display font-bold text-lg text-white">Volumetric Acoustic Refraction</h4>
-              <p className="text-xs text-slate-300 font-body leading-relaxed">
+              <h4 className="font-display font-bold text-lg text-slate-900">Volumetric Acoustic Refraction</h4>
+              <p className="text-xs text-slate-600 font-body leading-relaxed">
                 Frequency spectrum mapping that displaces 3D glass geometry based on acoustic amplitude.
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-slate-900/70 border border-slate-800 space-y-3">
-              <div className="flex items-center justify-between text-xs font-mono text-slate-400">
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 space-y-3 shadow-sm hover:border-slate-300 transition-all">
+              <div className="flex items-center justify-between text-xs font-mono text-slate-500 font-semibold">
                 <span>EXP-03</span>
-                <span className="text-blue-400">SPATIAL UI</span>
+                <span className="text-blue-700 font-bold">SPATIAL UI</span>
               </div>
-              <h4 className="font-display font-bold text-lg text-white">Spatial Depth Matrix</h4>
-              <p className="text-xs text-slate-300 font-body leading-relaxed">
+              <h4 className="font-display font-bold text-lg text-slate-900">Spatial Depth Matrix</h4>
+              <p className="text-xs text-slate-600 font-body leading-relaxed">
                 Multi-layer z-index physics simulated in WebGL for next-generation spatial computing interfaces.
               </p>
             </div>

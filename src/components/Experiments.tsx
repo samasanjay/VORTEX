@@ -11,20 +11,20 @@ export const Experiments: React.FC<ExperimentsProps> = ({ projects, onSelectProj
   const experimentalProjects = projects.filter((p) => p.type === 'EXPERIMENTAL CONCEPT');
 
   return (
-    <section className="py-24 bg-[#070A12] border-t border-slate-800 relative">
+    <section className="py-24 bg-[#F8FAFC] border-t border-slate-200/80 relative">
       <div className="container-vortex">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-slate-800">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-slate-200">
           <div>
-            <div className="text-xs font-mono text-purple-400 tracking-widest uppercase mb-2 flex items-center gap-2">
-              <Sparkles className="w-4 h-4" />
+            <div className="text-xs font-mono text-purple-700 tracking-widest uppercase mb-2 flex items-center gap-2 font-semibold">
+              <Sparkles className="w-4 h-4 text-purple-600" />
               LABORATORY EXPLORATIONS
             </div>
-            <h2 className="font-display font-extrabold text-3xl sm:text-5xl tracking-tight text-white">
+            <h2 className="font-display font-extrabold text-3xl sm:text-5xl tracking-tight text-slate-900">
               CREATIVE EXPERIMENTS
             </h2>
           </div>
-          <p className="text-slate-400 font-body text-sm sm:text-base max-w-md mt-4 md:mt-0">
+          <p className="text-slate-600 font-body text-sm sm:text-base max-w-md mt-4 md:mt-0">
             Unconstrained technical and visual explorations testing the boundaries of spatial interfaces, AI node pipelines, and quantum telemetry.
           </p>
         </div>
@@ -36,11 +36,11 @@ export const Experiments: React.FC<ExperimentsProps> = ({ projects, onSelectProj
               key={exp.id}
               onClick={() => onSelectProject(exp)}
               data-cursor="EXPERIMENT"
-              className="group rounded-3xl border border-purple-900/40 bg-[#0C101D] overflow-hidden hover:border-purple-500/60 transition-all duration-300 flex flex-col justify-between cursor-pointer shadow-xl"
+              className="group rounded-3xl border border-slate-200 bg-white overflow-hidden hover:border-purple-300 transition-all duration-300 flex flex-col justify-between cursor-pointer shadow-md hover:shadow-xl"
             >
               <div>
                 {/* Visual Thumbnail */}
-                <div className="relative aspect-[16/10] overflow-hidden bg-slate-950 border-b border-slate-800">
+                <div className="relative aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200">
                   <img
                     src={exp.featuredImage}
                     alt={exp.name}
@@ -48,7 +48,7 @@ export const Experiments: React.FC<ExperimentsProps> = ({ projects, onSelectProj
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-3 left-3 z-10">
-                    <span className="badge-concept">
+                    <span className="badge-concept bg-white/95 border border-purple-300 text-purple-800 shadow-sm">
                       <CheckCircle2 className="w-3 h-3" />
                       {exp.type}
                     </span>
@@ -57,24 +57,24 @@ export const Experiments: React.FC<ExperimentsProps> = ({ projects, onSelectProj
 
                 {/* Details */}
                 <div className="p-6 space-y-3">
-                  <span className="text-[11px] font-mono text-purple-400 uppercase font-semibold block">
+                  <span className="text-[11px] font-mono text-purple-700 uppercase font-bold block">
                     {exp.category}
                   </span>
-                  <h3 className="font-display font-bold text-2xl text-white group-hover:text-purple-300 transition-colors">
+                  <h3 className="font-display font-bold text-2xl text-slate-900 group-hover:text-purple-700 transition-colors">
                     {exp.name}
                   </h3>
-                  <p className="text-xs sm:text-sm text-slate-300 font-body leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-600 font-body leading-relaxed">
                     {exp.description}
                   </p>
                 </div>
               </div>
 
               {/* Action Footer */}
-              <div className="p-6 pt-0 border-t border-slate-800/80 mt-4 flex items-center justify-between">
-                <span className="text-[11px] font-mono text-slate-400">
+              <div className="p-6 pt-0 border-t border-slate-100 mt-4 flex items-center justify-between">
+                <span className="text-[11px] font-mono text-slate-500 font-medium">
                   {exp.status}
                 </span>
-                <span className="inline-flex items-center gap-1 text-xs font-mono font-semibold text-purple-400 group-hover:translate-x-1 transition-transform">
+                <span className="inline-flex items-center gap-1 text-xs font-mono font-semibold text-purple-700 group-hover:translate-x-1 transition-transform">
                   <span>Inspect Concept</span>
                   <ArrowUpRight className="w-4 h-4" />
                 </span>

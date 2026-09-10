@@ -42,7 +42,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#06080D] text-slate-100 flex flex-col selection:bg-blue-600 selection:text-white relative">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 flex flex-col selection:bg-blue-600 selection:text-white relative">
       {/* Desktop Custom Cursor */}
       <CustomCursor />
 

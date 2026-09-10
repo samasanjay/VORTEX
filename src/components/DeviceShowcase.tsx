@@ -2,7 +2,6 @@ import React from 'react';
 import { Smartphone, CheckCircle2 } from 'lucide-react';
 
 export const DeviceShowcase: React.FC = () => {
-
   const devices = [
     {
       id: 'fittrack',
@@ -12,7 +11,7 @@ export const DeviceShowcase: React.FC = () => {
       image: '/assets/projects/fittrack.jpg',
       badge: 'SAMPLE PROJECT',
       stats: '120 FPS Physics / Reanimated 3',
-      transform: 'rotateY(-12deg) rotateX(4deg)',
+      transform: 'rotateY(-10deg) rotateX(3deg)',
     },
     {
       id: 'velora',
@@ -22,7 +21,7 @@ export const DeviceShowcase: React.FC = () => {
       image: '/assets/projects/velora.jpg',
       badge: 'SAMPLE PROJECT',
       stats: '0.8s LCP / Next.js Edge',
-      transform: 'rotateY(0deg) scale(1.05)',
+      transform: 'rotateY(0deg) scale(1.04)',
     },
     {
       id: 'taskflow',
@@ -32,23 +31,23 @@ export const DeviceShowcase: React.FC = () => {
       image: '/assets/projects/taskflow.jpg',
       badge: 'SAMPLE PROJECT',
       stats: 'Optimistic State Sync',
-      transform: 'rotateY(12deg) rotateX(4deg)',
+      transform: 'rotateY(10deg) rotateX(3deg)',
     },
   ];
 
   return (
-    <section className="py-24 bg-[#05080E] border-t border-slate-800 relative overflow-hidden">
+    <section className="py-24 bg-[#F8FAFC] border-t border-slate-200/80 relative overflow-hidden">
       <div className="container-vortex">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-950/70 border border-blue-800/50 text-xs font-mono text-blue-400">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-xs font-mono text-blue-700 font-semibold">
             <Smartphone className="w-3.5 h-3.5" />
             <span>RESPONSIVE EXCELLENCE</span>
           </div>
-          <h2 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight">
+          <h2 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl text-slate-900 tracking-tight">
             DESIGNED FOR EVERY SCREEN
           </h2>
-          <p className="text-slate-300 font-body text-base sm:text-lg">
+          <p className="text-slate-600 font-body text-base sm:text-lg">
             Every digital experience adapts flawlessly across ultra-wide desktop monitors, laptops, tablets, and mobile smartphones.
           </p>
         </div>
@@ -58,12 +57,12 @@ export const DeviceShowcase: React.FC = () => {
           {devices.map((dev) => (
             <div
               key={dev.id}
-              className="phone-mockup-frame group rounded-3xl bg-[#090D18] border border-slate-800/90 p-6 flex flex-col justify-between"
+              className="phone-mockup-frame group rounded-3xl bg-white border border-slate-200 p-6 flex flex-col justify-between shadow-md"
               style={{ transform: dev.transform }}
               data-cursor="MOBILE"
             >
               {/* Phone Device Frame */}
-              <div className="relative rounded-[2.5rem] bg-black border-4 border-slate-700/80 p-2 shadow-2xl overflow-hidden mb-6 aspect-[9/16] flex flex-col">
+              <div className="relative rounded-[2.5rem] bg-slate-950 border-4 border-slate-800 p-2 shadow-2xl overflow-hidden mb-6 aspect-[9/16] flex flex-col">
                 {/* Dynamic Island Notch */}
                 <div className="absolute top-4 left-1/2 -translate-x-1/2 w-24 h-4 bg-slate-900 rounded-full z-20 flex items-center justify-between px-3 border border-slate-800">
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
@@ -86,7 +85,7 @@ export const DeviceShowcase: React.FC = () => {
               {/* Info Details */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-mono text-blue-400 uppercase font-semibold">
+                  <span className="text-[11px] font-mono text-blue-600 uppercase font-bold">
                     {dev.category}
                   </span>
                   <span className="badge-sample text-[10px]">
@@ -95,17 +94,17 @@ export const DeviceShowcase: React.FC = () => {
                   </span>
                 </div>
 
-                <h3 className="font-display font-bold text-xl text-white group-hover:text-blue-300 transition-colors">
+                <h3 className="font-display font-bold text-xl text-slate-900 group-hover:text-blue-600 transition-colors">
                   {dev.name}
                 </h3>
 
-                <p className="text-xs text-slate-300 font-body leading-relaxed">
+                <p className="text-xs text-slate-600 font-body leading-relaxed">
                   {dev.description}
                 </p>
 
-                <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono text-slate-500">
                   <span>Engine:</span>
-                  <span className="text-cyan-400 font-semibold">{dev.stats}</span>
+                  <span className="text-blue-700 font-bold">{dev.stats}</span>
                 </div>
               </div>
             </div>
