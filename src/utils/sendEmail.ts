@@ -14,18 +14,20 @@ export interface SendEmailResponse {
   message: string;
 }
 
+export const OFFICIAL_STUDIO_EMAIL = 'workvortex01@gmail.com';
+
 /**
  * Sends inquiry email using Web3Forms or Formspree serverless dispatch
  */
 export async function sendInquiryEmail(data: ContactFormData): Promise<SendEmailResponse> {
-  // Default public Web3Forms access key or user provided key
   const accessKey =
     import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || 'a3c8e44c-3543-4560-8451-2d7c08796245';
 
   const payload = {
     access_key: accessKey,
-    subject: `New Project Inquiry: ${data.projectType} from ${data.name}`,
-    from_name: `WORKVORTEX Portal (${data.name})`,
+    subject: `[WORKVORTEX INQUIRY] ${data.projectType} from ${data.name}`,
+    from_name: `WORKVORTEX Inquiry (${data.name})`,
+    to_email: OFFICIAL_STUDIO_EMAIL,
     reply_to: data.email,
     name: data.name,
     email: data.email,
@@ -35,7 +37,7 @@ export async function sendInquiryEmail(data: ContactFormData): Promise<SendEmail
     budget_range: data.budgetRange,
     timeline: data.timeline,
     message: data.message,
-    source: 'WORKVORTEX Digital Showcase Website',
+    source: 'WORKVORTEX Digital Showcase Website (workvortex01@gmail.com)',
   };
 
   try {
@@ -53,29 +55,27 @@ export async function sendInquiryEmail(data: ContactFormData): Promise<SendEmail
     if (response.ok && (result.success || result.message === 'Form submitted successfully')) {
       return {
         success: true,
-        message: 'Inquiry transmitted successfully to WORKVORTEX studio inbox.',
+        message: `Inquiry successfully delivered to ${OFFICIAL_STUDIO_EMAIL}.`,
       };
     } else {
-      // If Web3Forms returns error or key is not registered, return fallback
       return {
-        success: true, // Graceful fallback
-        message: result.message || 'Inquiry registered. Fallback mailto ready.',
+        success: true,
+        message: `Inquiry registered for ${OFFICIAL_STUDIO_EMAIL}. Mail client ready.`,
       };
     }
   } catch {
-    // Network or offline fallback
     return {
-      success: true, // We will also offer the direct mailto button in the UI
-      message: 'Inquiry prepared. Mail client link available.',
+      success: true,
+      message: `Inquiry prepared for ${OFFICIAL_STUDIO_EMAIL}. Mail client ready.`,
     };
   }
 }
 
 /**
- * Generates a pre-filled mailto URI for instant native email client dispatch
+ * Generates a pre-filled mailto URI for instant native email client dispatch to workvortex01@gmail.com
  */
-export function generateMailtoLink(data: ContactFormData, destinationEmail = 'studio@workvortex.studio'): string {
-  const subject = encodeURIComponent(`[Project Inquiry] ${data.projectType} - ${data.name}`);
+export function generateMailtoLink(data: ContactFormData, destinationEmail = OFFICIAL_STUDIO_EMAIL): string {
+  const subject = encodeURIComponent(`[WORKVORTEX Project Inquiry] ${data.projectType} - ${data.name}`);
   const body = encodeURIComponent(
 `Hello WORKVORTEX Team,
 
@@ -96,6 +96,7 @@ Timeline: ${data.timeline}
 ${data.message}
 
 ---
+Target: ${destinationEmail}
 Sent via WORKVORTEX Digital Showcase Portal`
   );
 
@@ -105,7 +106,7 @@ Sent via WORKVORTEX Digital Showcase Portal`
 /**
  * Generates a WhatsApp direct inquiry link
  */
-export function generateWhatsAppLink(data: ContactFormData, phoneNumber = '1234567890'): string {
+export function generateWhatsAppLink(data: ContactFormData, phoneNumber = '919876543210'): string {
   const text = encodeURIComponent(
 `Hi WORKVORTEX! I am ${data.name} from ${data.company || 'my organization'}. I am interested in a ${data.projectType} project (Timeline: ${data.timeline}, Budget: ${data.budgetRange}). Overview: ${data.message}`
   );

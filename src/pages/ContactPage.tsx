@@ -388,10 +388,10 @@ export const ContactPage: React.FC = () => {
                   <div>
                     <span className="text-xs font-mono text-slate-500 block uppercase">Project Inquiries</span>
                     <a
-                      href="mailto:studio@workvortex.studio"
+                      href="mailto:workvortex01@gmail.com"
                       className="text-sm font-semibold text-blue-600 hover:underline"
                     >
-                      studio@workvortex.studio
+                      workvortex01@gmail.com
                     </a>
                   </div>
                 </div>

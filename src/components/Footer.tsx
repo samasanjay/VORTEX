@@ -112,7 +112,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Quick Contact & Studio Location */}
+            {/* Quick Contact & Studio Location */}
           <div className="lg:col-span-3 space-y-3">
             <h4 className="text-xs font-mono uppercase tracking-wider text-slate-900 font-bold">
               Studio Inquiry
@@ -120,7 +120,13 @@ export const Footer: React.FC = () => {
             <p className="text-sm text-slate-600 leading-relaxed">
               Have a product design, web application, or interface concept in mind? Let’s architect something exceptional.
             </p>
-            <div className="pt-1">
+            <div className="space-y-2 pt-1">
+              <a
+                href="mailto:workvortex01@gmail.com"
+                className="text-xs font-mono text-blue-600 hover:underline block font-semibold"
+              >
+                workvortex01@gmail.com
+              </a>
               <Link to="/contact" className="btn-primary text-xs py-2 px-4 inline-flex">
                 <span>Inquire Now</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
