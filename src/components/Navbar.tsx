@@ -16,7 +16,6 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
@@ -33,34 +32,34 @@ export const Navbar: React.FC = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
         scrolled
-          ? 'glass-nav py-3.5 shadow-sm'
-          : 'bg-white/90 backdrop-blur-md py-4 border-b border-slate-200/80'
+          ? 'glass-nav py-3 shadow-sm'
+          : 'bg-white/90 backdrop-blur-md py-3.5 border-b border-slate-200/80'
       }`}
     >
       <div className="container-vortex flex items-center justify-between">
-        {/* Brand Logo */}
+        {/* Official Brand Logo */}
         <Link
           to="/"
-          className="flex items-center gap-3 group text-decoration-none"
+          className="flex items-center gap-2.5 group text-decoration-none"
           aria-label="WORKVORTEX home"
         >
-          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:bg-blue-700 transition-colors">
-            <svg viewBox="0 0 24 24" className="w-4 h-4 fill-none stroke-white stroke-2 stroke-linecap-round stroke-linejoin-round">
-              <path d="M4 6l4 12 4-8 4 8 4-12" />
-            </svg>
-          </div>
+          <img
+            src="/assets/workvortex-logo.jpg"
+            alt="WORKVORTEX Logo"
+            className="w-8 h-8 rounded-lg object-contain shadow-xs group-hover:scale-105 transition-transform"
+          />
           <div className="flex flex-col">
             <span className="font-display font-bold text-lg tracking-tight text-slate-900 leading-tight">
-              WORKVORTEX
+              WORK<span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">VORTEX</span>
             </span>
-            <span className="text-[10px] font-mono tracking-wider text-slate-500 font-semibold uppercase leading-none">
+            <span className="text-[9.5px] font-mono tracking-wider text-slate-500 font-semibold uppercase leading-none">
               Build. Automate. Scale.
             </span>
           </div>
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-1.5">
+        <nav className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => (
             <NavLink
               key={link.path}

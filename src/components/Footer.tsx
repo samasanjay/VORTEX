@@ -16,13 +16,13 @@ export const Footer: React.FC = () => {
           {/* Brand Info */}
           <div className="lg:col-span-4 space-y-4">
             <Link to="/" className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-sm">
-                <svg viewBox="0 0 24 24" className="w-4 h-4 fill-none stroke-white stroke-2 stroke-linecap-round stroke-linejoin-round">
-                  <path d="M4 6l4 12 4-8 4 8 4-12" />
-                </svg>
-              </div>
+              <img
+                src="/assets/workvortex-logo.jpg"
+                alt="WORKVORTEX"
+                className="w-9 h-9 rounded-lg object-contain shadow-xs"
+              />
               <span className="font-display font-bold text-xl text-slate-900 tracking-tight">
-                WORKVORTEX
+                WORK<span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">VORTEX</span>
               </span>
             </Link>
             <p className="text-sm text-slate-600 font-body max-w-sm leading-relaxed">
