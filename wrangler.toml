@@ -2,7 +2,10 @@ name = "vortex"
 main = "src/worker.ts"
 compatibility_date = "2026-09-10"
 
+# Cloudflare Workers Static Assets Configuration
+# Serves the Vite production build output from ./dist
 [assets]
 directory = "./dist"
 binding = "ASSETS"
 not_found_handling = "single-page-application"
+html_handling = "auto-trailing-slash"
