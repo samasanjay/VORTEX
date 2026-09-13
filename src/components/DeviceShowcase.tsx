@@ -73,8 +73,11 @@ export const DeviceShowcase: React.FC = () => {
                 <div className="relative w-full h-full rounded-[2rem] overflow-hidden bg-slate-950">
                   <img
                     src={dev.image}
-                    alt={dev.name}
+                    alt={`${dev.name} - ${dev.category} mobile device mockup preview`}
+                    width="360"
+                    height="640"
                     loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
                   />
                   {/* Subtle glass reflection */}

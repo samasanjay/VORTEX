@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { PROJECTS } from '../data/projects';
+import { SEO } from '../components/SEO';
+import { buildBreadcrumbSchema, buildCollectionSchema, SITE_URL } from '../config/seo';
 import type { FilterCategory } from '../types/project';
 import { ArrowUpRight, Search, CheckCircle2, Filter } from 'lucide-react';
 
@@ -30,8 +32,32 @@ export const WorkPage: React.FC = () => {
     });
   }, [activeFilter, searchQuery]);
 
+  const collectionSchema = buildCollectionSchema(
+    'Selected Digital Work & Product Directory',
+    'A comprehensive portfolio catalog of digital products, web applications, SaaS dashboards, and mobile experiences engineered by WORKVORTEX.',
+    `${SITE_URL}/work`,
+    PROJECTS.map((p) => ({
+      name: p.name,
+      url: `/work/${p.slug}`,
+      image: p.featuredImage,
+      description: p.description,
+    }))
+  );
+
+  const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Selected Work', path: '/work' },
+  ]);
+
   return (
     <div className="pt-32 pb-24 bg-[#F8FAFC]">
+      <SEO
+        title="Selected Digital Work & Product Case Studies — WORKVORTEX"
+        description="Explore the complete WORKVORTEX portfolio featuring luxury e-commerce, agile project management platforms, fintech dashboards, real estate portals, and health apps."
+        canonical="/work"
+        schema={[breadcrumbSchema, collectionSchema]}
+      />
+
       <div className="container-vortex space-y-12">
         {/* Header */}
         <div className="max-w-3xl space-y-4">
@@ -60,7 +86,7 @@ export const WorkPage: React.FC = () => {
                 <button
                   key={tab}
                   onClick={() => setActiveFilter(tab)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold tracking-wider transition-all ${
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold tracking-wider transition-all cursor-pointer ${
                     isActive
                       ? 'bg-blue-600 text-white shadow-sm'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
@@ -80,6 +106,7 @@ export const WorkPage: React.FC = () => {
               placeholder="Search projects or tech..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label="Search projects by name, category, or technology"
               className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-body text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
             />
           </div>
@@ -89,19 +116,23 @@ export const WorkPage: React.FC = () => {
         {filteredProjects.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProjects.map((project) => (
-              <div
+              <article
                 key={project.id}
                 className="group glass-card flex flex-col justify-between hover:border-blue-300 transition-all duration-300"
               >
                 <div>
                   <Link
                     to={`/work/${project.slug}`}
+                    aria-label={`Open full case study for ${project.name}`}
                     className="block relative aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200"
                   >
                     <img
                       src={project.featuredImage}
-                      alt={project.name}
+                      alt={`${project.name} - ${project.category} case study interface screenshot`}
+                      width="600"
+                      height="375"
                       loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute top-3 left-3 z-10">
@@ -125,12 +156,11 @@ export const WorkPage: React.FC = () => {
                     <span className="text-[11px] font-mono font-bold tracking-wider text-blue-600 uppercase block">
                       {project.category}
                     </span>
-                    <Link
-                      to={`/work/${project.slug}`}
-                      className="font-display font-bold text-xl text-slate-900 group-hover:text-blue-600 transition-colors block"
-                    >
-                      {project.name}
-                    </Link>
+                    <h2 className="font-display font-bold text-xl text-slate-900 group-hover:text-blue-600 transition-colors">
+                      <Link to={`/work/${project.slug}`} className="block">
+                        {project.name}
+                      </Link>
+                    </h2>
                     <p className="text-slate-600 text-xs sm:text-sm line-clamp-2 leading-relaxed">
                       {project.description}
                     </p>
@@ -157,7 +187,7 @@ export const WorkPage: React.FC = () => {
                     <ArrowUpRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
         ) : (
@@ -169,7 +199,7 @@ export const WorkPage: React.FC = () => {
                 setActiveFilter('ALL');
                 setSearchQuery('');
               }}
-              className="btn-secondary text-xs py-2 px-4"
+              className="btn-secondary text-xs py-2 px-4 cursor-pointer"
             >
               Reset Filters
             </button>

@@ -12,6 +12,8 @@ import {
   IndianRupee
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { SEO } from '../components/SEO';
+import { buildBreadcrumbSchema, buildContactSchema } from '../config/seo';
 import type { ContactFormData } from '../utils/sendEmail';
 import {
   sendInquiryEmail,
@@ -128,12 +130,26 @@ export const ContactPage: React.FC = () => {
   const mailtoUrl = generateMailtoLink(formData);
   const whatsappUrl = generateWhatsAppLink(formData);
 
+  const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Contact & Inquiries', path: '/contact' },
+  ]);
+
+  const contactSchema = buildContactSchema();
+
   return (
     <div className="pt-32 pb-24 bg-[#F8FAFC]">
+      <SEO
+        title="Start a Project & Pricing Calculator — WORKVORTEX Studio"
+        description="Request a digital product consultation with WORKVORTEX. Transparent pricing estimates for web applications, SaaS dashboards, e-commerce, and design systems."
+        canonical="/contact"
+        schema={[breadcrumbSchema, contactSchema]}
+      />
+
       <div className="container-vortex space-y-16">
         
         {/* Header */}
-        <div className="max-w-3xl space-y-4">
+        <header className="max-w-3xl space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-xs font-mono text-blue-700 font-semibold">
             <Mail className="w-3.5 h-3.5" />
             <span>START A PROJECT INQUIRY</span>
@@ -144,21 +160,21 @@ export const ContactPage: React.FC = () => {
           <p className="text-slate-600 font-body text-base sm:text-lg leading-relaxed">
             Fill in your project requirements below. Your inquiry will be transmitted directly to our studio inbox, and our engineering team will get back to you within 24 hours.
           </p>
-        </div>
+        </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
           {/* Left Column: Interactive Form */}
-          <div className="lg:col-span-7 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-sm">
+          <section aria-label="Inquiry Form" className="lg:col-span-7 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-sm">
             {submitted ? (
               <div className="py-8 space-y-8">
                 <div className="text-center space-y-3">
                   <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center mx-auto shadow-sm">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
-                  <h3 className="font-display font-bold text-2xl sm:text-3xl text-slate-900">
+                  <h2 className="font-display font-bold text-2xl sm:text-3xl text-slate-900">
                     Inquiry Sent Successfully!
-                  </h3>
+                  </h2>
                   {statusMessage && (
                     <div className="inline-block px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-mono text-emerald-700 font-semibold">
                       {statusMessage}
@@ -244,7 +260,7 @@ export const ContactPage: React.FC = () => {
                         message: '',
                       });
                     }}
-                    className="text-xs font-mono font-semibold text-slate-600 hover:text-slate-900 py-2 px-3 rounded-lg hover:bg-slate-100"
+                    className="text-xs font-mono font-semibold text-slate-600 hover:text-slate-900 py-2 px-3 rounded-lg hover:bg-slate-100 cursor-pointer"
                   >
                     Submit Another Inquiry
                   </button>
@@ -260,10 +276,11 @@ export const ContactPage: React.FC = () => {
                 {/* Name and Email */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-mono font-semibold text-slate-700 block">
+                    <label htmlFor="name-input" className="text-xs font-mono font-semibold text-slate-700 block">
                       Your Name *
                     </label>
                     <input
+                      id="name-input"
                       type="text"
                       required
                       placeholder="e.g. Alex Rivera"
@@ -274,10 +291,11 @@ export const ContactPage: React.FC = () => {
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-mono font-semibold text-slate-700 block">
+                    <label htmlFor="email-input" className="text-xs font-mono font-semibold text-slate-700 block">
                       Email Address *
                     </label>
                     <input
+                      id="email-input"
                       type="email"
                       required
                       placeholder="alex@company.com"
@@ -291,10 +309,11 @@ export const ContactPage: React.FC = () => {
                 {/* Company and Phone */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-mono font-semibold text-slate-700 block">
+                    <label htmlFor="company-input" className="text-xs font-mono font-semibold text-slate-700 block">
                       Company / Organization
                     </label>
                     <input
+                      id="company-input"
                       type="text"
                       placeholder="e.g. Acme Studio"
                       value={formData.company}
@@ -304,10 +323,11 @@ export const ContactPage: React.FC = () => {
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-mono font-semibold text-slate-700 block">
+                    <label htmlFor="phone-input" className="text-xs font-mono font-semibold text-slate-700 block">
                       Phone / WhatsApp (Optional)
                     </label>
                     <input
+                      id="phone-input"
                       type="text"
                       placeholder="+1 (555) 000-0000"
                       value={formData.phone}
@@ -328,7 +348,7 @@ export const ContactPage: React.FC = () => {
                         type="button"
                         key={type}
                         onClick={() => handleProjectTypeSelect(type)}
-                        className={`p-2.5 rounded-xl text-left text-xs font-medium border transition-colors ${
+                        className={`p-2.5 rounded-xl text-left text-xs font-medium border transition-colors cursor-pointer ${
                           formData.projectType === type
                             ? 'bg-blue-50 border-blue-300 text-blue-700 font-semibold shadow-xs'
                             : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
@@ -345,20 +365,18 @@ export const ContactPage: React.FC = () => {
                   {/* Budget */}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <label className="text-xs font-mono font-semibold text-slate-700 block flex items-center gap-1">
+                      <label htmlFor="budget-select" className="text-xs font-mono font-semibold text-slate-700 flex items-center gap-1">
                         <IndianRupee className="w-3.5 h-3.5 text-slate-500" />
                         <span>Budget Estimate (INR ₹ / USD $)</span>
                       </label>
-                      <span className="text-[10px] font-mono text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
-                        Tailored for {formData.projectType.split(' ')[0]}
-                      </span>
                     </div>
                     <select
+                      id="budget-select"
                       value={formData.budgetRange}
                       onChange={(e) => setFormData({ ...formData, budgetRange: e.target.value })}
                       className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white"
                     >
-                      {(budgetOptionsMap[formData.projectType] || budgetOptionsMap['Web Application / SaaS']).map((b) => (
+                      {(budgetOptionsMap[formData.projectType] || budgetOptionsMap['Basic Business Website']).map((b) => (
                         <option key={b} value={b}>
                           {b}
                         </option>
@@ -368,11 +386,12 @@ export const ContactPage: React.FC = () => {
 
                   {/* Timeline */}
                   <div className="space-y-2">
-                    <label className="text-xs font-mono font-semibold text-slate-700 block flex items-center gap-1">
+                    <label htmlFor="timeline-select" className="text-xs font-mono font-semibold text-slate-700 flex items-center gap-1">
                       <Clock className="w-3.5 h-3.5 text-slate-500" />
                       <span>Estimated Timeline</span>
                     </label>
                     <select
+                      id="timeline-select"
                       value={formData.timeline}
                       onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
                       className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white"
@@ -388,10 +407,11 @@ export const ContactPage: React.FC = () => {
 
                 {/* Message Textarea */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono font-semibold text-slate-700 block">
+                  <label htmlFor="message-textarea" className="text-xs font-mono font-semibold text-slate-700 block">
                     Project Requirements & Deliverables *
                   </label>
                   <textarea
+                    id="message-textarea"
                     rows={4}
                     required
                     placeholder="Describe your project goals, target audience, preferred technologies, and specific features needed..."
@@ -425,17 +445,17 @@ export const ContactPage: React.FC = () => {
                 </p>
               </form>
             )}
-          </div>
+          </section>
 
           {/* Right Column: Studio Information & Direct Email */}
-          <div className="lg:col-span-5 space-y-6">
+          <aside aria-label="Studio Contact Information" className="lg:col-span-5 space-y-6">
             
             <div className="p-8 rounded-3xl bg-white border border-slate-200 space-y-6 shadow-sm">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-blue-600" />
-                <h3 className="font-display font-bold text-xl text-slate-900">
+                <h2 className="font-display font-bold text-xl text-slate-900">
                   Direct Studio Inbox
-                </h3>
+                </h2>
               </div>
 
               <div className="space-y-4">
@@ -482,15 +502,15 @@ export const ContactPage: React.FC = () => {
               <span className="text-xs font-mono text-blue-600 uppercase font-bold">
                 Engagement Model
               </span>
-              <h4 className="font-display font-bold text-lg text-slate-900">
+              <h3 className="font-display font-bold text-lg text-slate-900">
                 End-to-End Product Sprints
-              </h4>
+              </h3>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                 We take ideas from wireframes and product architecture to interactive prototypes, component systems, and production frontend code with clear milestone deliverables.
               </p>
             </div>
 
-          </div>
+          </aside>
 
         </div>
 

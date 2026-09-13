@@ -10,8 +10,11 @@ export const DigitalLab: React.FC = () => {
 
   const wireframeRef = useRef(wireframe);
   const speedRef = useRef(rotationSpeed);
-  wireframeRef.current = wireframe;
-  speedRef.current = rotationSpeed;
+
+  useEffect(() => {
+    wireframeRef.current = wireframe;
+    speedRef.current = rotationSpeed;
+  }, [wireframe, rotationSpeed]);
 
   useEffect(() => {
     const container = mountRef.current;

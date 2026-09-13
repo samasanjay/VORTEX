@@ -11,6 +11,7 @@ import { UIArchivePage } from './pages/UIArchivePage';
 import { DesignSystemPage } from './pages/DesignSystemPage';
 import { AboutPage } from './pages/AboutPage';
 import { ContactPage } from './pages/ContactPage';
+import { NotFoundPage } from './pages/NotFoundPage';
 
 export const App: React.FC = () => {
   return (
@@ -32,8 +33,8 @@ export const App: React.FC = () => {
             <Route path="/design-system" element={<DesignSystemPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
-            {/* Fallback */}
-            <Route path="*" element={<HomePage />} />
+            {/* 404 Not Found Handling */}
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
 

@@ -1,4 +1,9 @@
+# https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
 
+# Disallow direct indexing of error fallback routes
+Disallow: /404
+
+# XML Sitemaps
 Sitemap: https://workvortex.studio/sitemap.xml

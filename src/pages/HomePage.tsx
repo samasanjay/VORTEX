@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PROJECTS } from '../data/projects';
+import { SEO } from '../components/SEO';
+import { buildOrganizationSchema, buildWebSiteSchema } from '../config/seo';
 import {
   ArrowDown,
   ArrowUpRight,
@@ -52,6 +54,13 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="space-y-0">
+      <SEO
+        title="WORKVORTEX — Digital Experiences, UI/UX & Product Engineering Studio"
+        description="WORKVORTEX crafts high-performance digital products, web applications, SaaS dashboards, and modern interfaces engineered with React, Next.js, and TypeScript."
+        canonical="/"
+        schema={[buildOrganizationSchema(), buildWebSiteSchema()]}
+      />
+
       {/* 1. Hero Section */}
       <section className="relative pt-32 sm:pt-40 pb-20 md:pb-28 overflow-hidden bg-radial-gradient border-b border-slate-200/80">
         <div className="absolute inset-0 bg-grid-pattern opacity-60 pointer-events-none" />
@@ -117,9 +126,10 @@ export const HomePage: React.FC = () => {
             {/* Right Column: Hero Visual Mockup */}
             <div className="lg:col-span-5 relative flex items-center justify-center">
               <div className="w-full relative space-y-4">
-                <div
-                  onClick={() => navigate('/work/velora')}
-                  className="relative rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer group"
+                <Link
+                  to="/work/velora"
+                  aria-label="View Velora Luxury E-Commerce Case Study"
+                  className="block relative rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 group"
                 >
                   <div className="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
@@ -128,7 +138,7 @@ export const HomePage: React.FC = () => {
                       <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
                     </div>
                     <div className="text-[11px] font-mono text-slate-500 font-medium">
-                      workvortex.studio/velora
+                      workvortex.studio/work/velora
                     </div>
                     <span className="badge-sample text-[10px] py-0.5 px-2">
                       SAMPLE
@@ -138,38 +148,45 @@ export const HomePage: React.FC = () => {
                   <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
                     <img
                       src="/assets/projects/velora.jpg"
-                      alt="Velora E-commerce preview"
+                      alt="Velora Luxury E-commerce platform interface preview"
+                      width="800"
+                      height="500"
+                      loading="eager"
                       className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
 
                   <div className="p-4 bg-white border-t border-slate-100 flex items-center justify-between">
                     <div>
-                      <h4 className="font-display font-bold text-sm text-slate-900 group-hover:text-blue-600 transition-colors">
+                      <div className="font-display font-bold text-sm text-slate-900 group-hover:text-blue-600 transition-colors">
                         VELORA LUXURY E-COMMERCE
-                      </h4>
+                      </div>
                       <span className="text-xs text-slate-500">Next.js • TypeScript • Tailwind CSS</span>
                     </div>
                     <span className="text-xs font-semibold text-blue-600 flex items-center gap-1">
                       Case Study →
                     </span>
                   </div>
-                </div>
+                </Link>
 
-                <div
-                  onClick={() => navigate('/work/taskflow')}
-                  className="hidden sm:flex items-center gap-3 p-3.5 rounded-xl bg-white border border-slate-200 shadow-lg absolute -bottom-6 -left-6 z-20 max-w-xs cursor-pointer hover:border-blue-300 transition-all"
+                <Link
+                  to="/work/taskflow"
+                  aria-label="View Taskflow Platform Case Study"
+                  className="hidden sm:flex items-center gap-3 p-3.5 rounded-xl bg-white border border-slate-200 shadow-lg absolute -bottom-6 -left-6 z-20 max-w-xs hover:border-blue-300 transition-all"
                 >
                   <img
                     src="/assets/projects/taskflow.jpg"
-                    alt="Taskflow preview"
+                    alt="Taskflow agile sprint cockpit interface preview"
+                    width="48"
+                    height="48"
+                    loading="lazy"
                     className="w-12 h-12 rounded-lg object-cover border border-slate-100"
                   />
                   <div>
                     <div className="text-xs font-bold text-slate-900">TASKFLOW PLATFORM</div>
                     <div className="text-[11px] text-slate-500">Agile sprint kanban cockpit →</div>
                   </div>
-                </div>
+                </Link>
               </div>
             </div>
 
@@ -263,6 +280,7 @@ export const HomePage: React.FC = () => {
                     <div className={`lg:col-span-7 p-4 sm:p-6 lg:p-8 ${isReversed ? 'lg:order-1' : 'lg:order-2'}`}>
                       <Link
                         to={`/work/${project.slug}`}
+                        aria-label={`View ${project.name} case study`}
                         className="block relative rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-md hover:border-blue-400 transition-all duration-300 group/img"
                       >
                         <div className="px-4 py-2.5 bg-slate-100/90 border-b border-slate-200 flex items-center justify-between">
@@ -272,7 +290,7 @@ export const HomePage: React.FC = () => {
                             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
                           </div>
                           <div className="text-[11px] font-mono text-slate-500 font-medium">
-                            workvortex.studio/{project.slug}
+                            workvortex.studio/work/{project.slug}
                           </div>
                           <span className="text-[10px] font-mono text-blue-700 font-bold">
                             2026 RELEASE
@@ -282,8 +300,11 @@ export const HomePage: React.FC = () => {
                         <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
                           <img
                             src={project.featuredImage}
-                            alt={project.name}
+                            alt={`${project.name} - ${project.category} case study interface visual`}
+                            width="800"
+                            height="500"
                             loading="lazy"
+                            decoding="async"
                             className="w-full h-full object-cover object-top group-hover/img:scale-[1.03] transition-transform duration-700"
                           />
                         </div>
@@ -323,12 +344,16 @@ export const HomePage: React.FC = () => {
                 <div>
                   <Link
                     to={`/work/${project.slug}`}
+                    aria-label={`Open case study for ${project.name}`}
                     className="block relative aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200"
                   >
                     <img
                       src={project.featuredImage}
-                      alt={project.name}
+                      alt={`${project.name} - ${project.category} preview screenshot`}
+                      width="600"
+                      height="375"
                       loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute top-3 left-3 z-10">
@@ -407,8 +432,11 @@ export const HomePage: React.FC = () => {
                   <div className="relative w-full h-full rounded-[2rem] overflow-hidden bg-slate-950">
                     <img
                       src={dev.image}
-                      alt={dev.name}
+                      alt={`${dev.name} - ${dev.category} mobile interface preview`}
+                      width="360"
+                      height="640"
                       loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>

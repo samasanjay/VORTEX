@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { PROJECTS } from '../data/projects';
+import { SEO } from '../components/SEO';
+import { buildBreadcrumbSchema, buildProjectSchema } from '../config/seo';
 import {
   ArrowLeft,
   ArrowRight,
@@ -28,7 +30,13 @@ export const ProjectDetailPage: React.FC = () => {
   if (!project) {
     return (
       <div className="pt-40 pb-24 text-center container-vortex space-y-4">
-        <h2 className="font-display font-bold text-3xl text-slate-900">Project Not Found</h2>
+        <SEO
+          title="Project Not Found"
+          description="The requested project case study was not found in the WORKVORTEX directory."
+          noindex={true}
+          canonical="/work"
+        />
+        <h1 className="font-display font-bold text-3xl text-slate-900">Project Not Found</h1>
         <p className="text-slate-600">The project you are looking for does not exist in our directory.</p>
         <Link to="/work" className="btn-primary inline-flex">
           Back to Portfolio Directory
@@ -46,10 +54,27 @@ export const ProjectDetailPage: React.FC = () => {
     setTimeout(() => setCopiedHex(null), 2000);
   };
 
+  const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Selected Work', path: '/work' },
+    { name: project.name, path: `/work/${project.slug}` },
+  ]);
+  const projectSchema = buildProjectSchema(project);
+
   return (
     <div className="pt-28 pb-24 bg-[#F8FAFC]">
+      <SEO
+        title={`${project.name} Case Study — ${project.category}`}
+        description={`${project.description} Engineered with ${project.technologies.join(', ')}. ${project.highlightSummary}`}
+        canonical={`/work/${project.slug}`}
+        ogImage={project.featuredImage}
+        ogType="article"
+        keywords={`${project.name}, ${project.category}, ${project.technologies.join(', ')}, WORKVORTEX, UI/UX design, software architecture`}
+        schema={[breadcrumbSchema, projectSchema]}
+      />
+
       {/* Top Breadcrumb Bar */}
-      <div className="border-b border-slate-200 bg-white/80 backdrop-blur-md sticky top-[69px] z-30 py-3 shadow-2xs">
+      <nav aria-label="Breadcrumb navigation" className="border-b border-slate-200 bg-white/80 backdrop-blur-md sticky top-[69px] z-30 py-3 shadow-2xs">
         <div className="container-vortex flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
             <Link to="/" className="hover:text-blue-600 transition-colors">
@@ -66,7 +91,7 @@ export const ProjectDetailPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => navigate(`/work/${prevProject.slug}`)}
-              className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 text-xs flex items-center gap-1 transition-colors"
+              className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 text-xs flex items-center gap-1 transition-colors cursor-pointer"
               title={`Previous: ${prevProject.name}`}
             >
               <ArrowLeft className="w-3.5 h-3.5" />
@@ -74,7 +99,7 @@ export const ProjectDetailPage: React.FC = () => {
             </button>
             <button
               onClick={() => navigate(`/work/${nextProject.slug}`)}
-              className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 text-xs flex items-center gap-1 transition-colors"
+              className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 text-xs flex items-center gap-1 transition-colors cursor-pointer"
               title={`Next: ${nextProject.name}`}
             >
               <span className="hidden sm:inline">Next</span>
@@ -82,12 +107,12 @@ export const ProjectDetailPage: React.FC = () => {
             </button>
           </div>
         </div>
-      </div>
+      </nav>
 
-      <div className="container-vortex pt-10 space-y-16">
+      <article className="container-vortex pt-10 space-y-16">
         
         {/* Project Header Dossier */}
-        <div className="space-y-6">
+        <header className="space-y-6">
           <div className="flex flex-wrap items-center gap-3">
             <span
               className={
@@ -121,10 +146,10 @@ export const ProjectDetailPage: React.FC = () => {
               </span>
             ))}
           </div>
-        </div>
+        </header>
 
         {/* Interactive Device Viewport */}
-        <div className="space-y-4">
+        <section aria-label="Interactive Device Viewport" className="space-y-4">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono text-slate-500 uppercase tracking-wider font-semibold">
               Live Interface Stage
@@ -132,7 +157,7 @@ export const ProjectDetailPage: React.FC = () => {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setDeviceMode('desktop')}
-                className={`p-1.5 px-3 rounded-lg text-xs font-mono flex items-center gap-1.5 transition-colors ${
+                className={`p-1.5 px-3 rounded-lg text-xs font-mono flex items-center gap-1.5 transition-colors cursor-pointer ${
                   deviceMode === 'desktop'
                     ? 'bg-blue-50 text-blue-700 border border-blue-200 font-semibold'
                     : 'bg-white text-slate-600 border border-slate-200 hover:text-slate-900'
@@ -143,7 +168,7 @@ export const ProjectDetailPage: React.FC = () => {
               </button>
               <button
                 onClick={() => setDeviceMode('mobile')}
-                className={`p-1.5 px-3 rounded-lg text-xs font-mono flex items-center gap-1.5 transition-colors ${
+                className={`p-1.5 px-3 rounded-lg text-xs font-mono flex items-center gap-1.5 transition-colors cursor-pointer ${
                   deviceMode === 'mobile'
                     ? 'bg-blue-50 text-blue-700 border border-blue-200 font-semibold'
                     : 'bg-white text-slate-600 border border-slate-200 hover:text-slate-900'
@@ -154,7 +179,7 @@ export const ProjectDetailPage: React.FC = () => {
               </button>
               <button
                 onClick={() => setIsZoomed(!isZoomed)}
-                className="p-1.5 px-3 rounded-lg text-xs font-mono flex items-center gap-1.5 bg-white text-slate-600 border border-slate-200 hover:text-slate-900"
+                className="p-1.5 px-3 rounded-lg text-xs font-mono flex items-center gap-1.5 bg-white text-slate-600 border border-slate-200 hover:text-slate-900 cursor-pointer"
               >
                 {isZoomed ? <ZoomOut className="w-3.5 h-3.5" /> : <ZoomIn className="w-3.5 h-3.5" />}
                 <span>{isZoomed ? 'Reset Scale' : 'Zoom Inspect'}</span>
@@ -174,20 +199,24 @@ export const ProjectDetailPage: React.FC = () => {
                   <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
                 </div>
-                <span>workvortex.studio/{project.slug}</span>
+                <span>workvortex.studio/work/{project.slug}</span>
                 <span>100% SCALE</span>
               </div>
               <img
                 src={project.featuredImage}
-                alt={project.name}
+                alt={`${project.name} - ${project.category} high-resolution interface view`}
+                width="1200"
+                height="750"
+                loading="eager"
+                decoding="async"
                 className="w-full h-auto object-contain object-top"
               />
             </div>
           </div>
-        </div>
+        </section>
 
         {/* 9-Chapter Case Study Breakdown */}
-        <div className="space-y-8">
+        <section aria-label="Case Study Documentation" className="space-y-8">
           <div className="border-b border-slate-200 pb-4">
             <h2 className="font-display font-bold text-2xl sm:text-3xl text-slate-900">
               Case Study Documentation
@@ -288,10 +317,10 @@ export const ProjectDetailPage: React.FC = () => {
               {project.finalExperience}
             </p>
           </div>
-        </div>
+        </section>
 
         {/* Design System Tokens for this project */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-6">
+        <section aria-label="Project Design Tokens" className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-6">
           {/* Color Palette */}
           <div className="p-8 rounded-3xl bg-white border border-slate-200 space-y-6 shadow-sm">
             <div className="flex items-center gap-2">
@@ -307,13 +336,13 @@ export const ProjectDetailPage: React.FC = () => {
                   >
                     <button
                       onClick={() => copyColor(c.hex)}
-                      className="p-1 rounded bg-white/90 text-slate-800 shadow-xs"
-                      title="Copy HEX"
+                      className="p-1 rounded bg-white/90 text-slate-800 shadow-xs cursor-pointer hover:bg-white"
+                      title={`Copy HEX ${c.hex}`}
                     >
                       {copiedHex === c.hex ? (
-                        <Check className="w-3 h-3 text-emerald-600" />
+                        <Check className="w-3.5 h-3.5 text-emerald-600" />
                       ) : (
-                        <Copy className="w-3 h-3" />
+                        <Copy className="w-3.5 h-3.5" />
                       )}
                     </button>
                   </div>
@@ -349,10 +378,30 @@ export const ProjectDetailPage: React.FC = () => {
               ))}
             </div>
           </div>
-        </div>
+        </section>
+
+        {/* Cross-Link CTA to Design System & Contact */}
+        <section className="p-8 rounded-3xl bg-white border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+          <div className="space-y-1 text-left">
+            <h3 className="font-display font-bold text-lg text-slate-900">
+              Need a platform engineered like {project.name}?
+            </h3>
+            <p className="text-slate-600 text-sm">
+              We specialize in custom web applications, SaaS dashboards, and high-conversion e-commerce systems.
+            </p>
+          </div>
+          <div className="flex items-center gap-3 shrink-0">
+            <Link to="/design-system" className="btn-secondary text-xs py-2.5 px-4 font-mono">
+              View Design System
+            </Link>
+            <Link to="/contact" className="btn-primary text-xs py-2.5 px-5 font-mono">
+              Start Project Inquiry →
+            </Link>
+          </div>
+        </section>
 
         {/* Bottom Navigation */}
-        <div className="pt-12 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <footer className="pt-12 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <Link
             to={`/work/${prevProject.slug}`}
             className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-slate-200 hover:border-blue-300 transition-colors shadow-xs group"
@@ -374,9 +423,9 @@ export const ProjectDetailPage: React.FC = () => {
             </div>
             <ArrowRight className="w-5 h-5 text-blue-600 group-hover:translate-x-1 transition-transform" />
           </Link>
-        </div>
+        </footer>
 
-      </div>
+      </article>
     </div>
   );
 };

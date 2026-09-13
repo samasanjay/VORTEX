@@ -15,10 +15,13 @@ export const Footer: React.FC = () => {
           
           {/* Brand Info */}
           <div className="lg:col-span-4 space-y-4">
-            <Link to="/" className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-3" aria-label="WORKVORTEX home">
               <img
-                src="/assets/workvortex-logo.jpg"
-                alt="WORKVORTEX"
+                src="/assets/workvortex-logo.png"
+                alt="WORKVORTEX Digital Studio Logo"
+                width="36"
+                height="36"
+                decoding="async"
                 className="w-9 h-9 rounded-lg object-contain shadow-xs"
               />
               <span className="font-display font-bold text-xl text-slate-900 tracking-tight">
@@ -36,9 +39,9 @@ export const Footer: React.FC = () => {
 
           {/* Navigation Column */}
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="text-xs font-mono uppercase tracking-wider text-slate-900 font-bold">
+            <h3 className="text-xs font-mono uppercase tracking-wider text-slate-900 font-bold">
               Navigation
-            </h4>
+            </h3>
             <ul className="space-y-2 text-sm text-slate-600">
               <li>
                 <Link to="/" className="hover:text-blue-600 transition-colors">
@@ -75,9 +78,9 @@ export const Footer: React.FC = () => {
 
           {/* Projects Column */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-xs font-mono uppercase tracking-wider text-slate-900 font-bold">
+            <h3 className="text-xs font-mono uppercase tracking-wider text-slate-900 font-bold">
               Featured Projects
-            </h4>
+            </h3>
             <ul className="space-y-2 text-sm text-slate-600">
               <li>
                 <Link to="/work/velora" className="hover:text-blue-600 transition-colors flex items-center justify-between group">
@@ -112,11 +115,11 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-            {/* Quick Contact & Studio Location */}
+          {/* Quick Contact & Studio Location */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-xs font-mono uppercase tracking-wider text-slate-900 font-bold">
+            <h3 className="text-xs font-mono uppercase tracking-wider text-slate-900 font-bold">
               Studio Inquiry
-            </h4>
+            </h3>
             <p className="text-sm text-slate-600 leading-relaxed">
               Have a product design, web application, or interface concept in mind? Let’s architect something exceptional.
             </p>
@@ -143,8 +146,8 @@ export const Footer: React.FC = () => {
           </div>
           <button
             onClick={scrollToTop}
-            className="p-2.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors self-start sm:self-auto shadow-xs flex items-center gap-1.5"
-            aria-label="Back to top"
+            className="p-2.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors self-start sm:self-auto shadow-xs flex items-center gap-1.5 cursor-pointer"
+            aria-label="Back to top of page"
           >
             <span>Back to top</span>
             <ArrowUp className="w-3.5 h-3.5" />

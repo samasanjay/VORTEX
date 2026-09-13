@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { TECH_STACK } from '../data/projects';
+import { SEO } from '../components/SEO';
+import { buildBreadcrumbSchema, buildAboutSchema } from '../config/seo';
 import {
   Sparkles,
   Terminal,
@@ -60,11 +62,25 @@ export const AboutPage: React.FC = () => {
     }
   };
 
+  const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'About Studio', path: '/about' },
+  ]);
+
+  const aboutSchema = buildAboutSchema();
+
   return (
     <div className="pt-32 pb-24 bg-[#F8FAFC]">
+      <SEO
+        title="About WORKVORTEX — Digital Product Studio Philosophy & Capabilities"
+        description="Learn about WORKVORTEX studio philosophy, core engineering pillars, design principles, and full-stack technical capabilities in Next.js, React, TypeScript, and UI/UX."
+        canonical="/about"
+        schema={[breadcrumbSchema, aboutSchema]}
+      />
+
       <div className="container-vortex space-y-20">
         {/* Hero */}
-        <div className="max-w-3xl space-y-6">
+        <header className="max-w-3xl space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-mono text-slate-700 font-semibold">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
             <span>STUDIO PHILOSOPHY & CAPABILITIES</span>
@@ -82,10 +98,10 @@ export const AboutPage: React.FC = () => {
               We design and develop modern interfaces, web experiences, applications, and experimental digital products with an unyielding commitment to craftsmanship, performance, and honest presentation.
             </p>
           </div>
-        </div>
+        </header>
 
         {/* 4 Pillars */}
-        <div className="space-y-8">
+        <section aria-label="Core Engineering Pillars" className="space-y-8">
           <div className="border-b border-slate-200 pb-4">
             <h2 className="font-display font-bold text-2xl sm:text-3xl text-slate-900">
               Core Engineering Pillars
@@ -113,10 +129,10 @@ export const AboutPage: React.FC = () => {
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* Technology Foundation */}
-        <div className="space-y-8">
+        <section aria-label="Technology Foundation" className="space-y-8">
           <div className="border-b border-slate-200 pb-4">
             <h2 className="font-display font-bold text-2xl sm:text-3xl text-slate-900">
               Built With Modern Technology
@@ -157,51 +173,52 @@ export const AboutPage: React.FC = () => {
                   </span>
                   <div className="flex flex-wrap gap-1">
                     {tech.featuredIn.map((p) => (
-                      <span
+                      <Link
                         key={p}
-                        className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-50 border border-slate-200 text-blue-700 font-semibold"
+                        to="/work"
+                        className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-50 border border-slate-200 text-blue-700 font-semibold hover:bg-blue-50 transition-colors"
                       >
                         {p}
-                      </span>
+                      </Link>
                     ))}
                   </div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* Transparent Portfolio Disclosure */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-white border border-slate-200 space-y-4 shadow-sm">
+        <section aria-label="Showcase Policy" className="p-8 sm:p-10 rounded-3xl bg-white border border-slate-200 space-y-4 shadow-sm">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-5 h-5 text-blue-600" />
-            <h3 className="font-display font-bold text-xl text-slate-900">
+            <h2 className="font-display font-bold text-xl text-slate-900">
               Transparent Showcase Policy
-            </h3>
+            </h2>
           </div>
           <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
             All sample projects presented in this showcase (such as Velora, Taskflow, Finmate, Homora, FitTrack, and SpiceHub) are high-fidelity conceptual and demonstration builds engineered by WORKVORTEX. We believe in presenting our technical capabilities and design craftsmanship with complete transparency, without fictional client claims or vanity statistics.
           </p>
-        </div>
+        </section>
 
         {/* CTA */}
-        <div className="p-10 sm:p-12 rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-lg">
+        <section aria-label="Contact Studio" className="p-10 sm:p-12 rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-lg">
           <div className="space-y-2 max-w-xl">
-            <h3 className="font-display font-extrabold text-2xl sm:text-3xl text-white">
+            <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-white">
               Ready to architect your next digital product?
-            </h3>
+            </h2>
             <p className="text-blue-100 text-sm sm:text-base">
               Get in touch with our team to discuss project requirements, timelines, and interface specs.
             </p>
           </div>
           <Link
             to="/contact"
-            className="px-6 py-3.5 rounded-full bg-white text-blue-600 font-bold text-sm shadow-md hover:bg-blue-50 transition-colors inline-flex items-center gap-2 shrink-0 self-start md:self-auto"
+            className="px-6 py-3.5 rounded-full bg-white text-blue-600 font-bold text-sm shadow-md hover:bg-blue-50 transition-colors inline-flex items-center gap-2 shrink-0 self-start md:self-auto cursor-pointer"
           >
             <span>Start a Project</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
-        </div>
+        </section>
 
       </div>
     </div>

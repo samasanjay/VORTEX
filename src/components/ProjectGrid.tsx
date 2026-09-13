@@ -86,8 +86,11 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, onSelectProj
                 >
                   <img
                     src={project.featuredImage}
-                    alt={project.name}
+                    alt={`${project.name} - ${project.category} interface preview`}
+                    width="600"
+                    height="375"
                     loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                   />
                   

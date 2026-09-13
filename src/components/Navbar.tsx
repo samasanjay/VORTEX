@@ -16,9 +16,11 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
+  const [prevPath, setPrevPath] = useState(location.pathname);
+  if (location.pathname !== prevPath) {
+    setPrevPath(location.pathname);
     setMobileMenuOpen(false);
-  }, [location.pathname]);
+  }
 
   const navLinks = [
     { label: 'Home', path: '/' },
@@ -44,8 +46,11 @@ export const Navbar: React.FC = () => {
           aria-label="WORKVORTEX home"
         >
           <img
-            src="/assets/workvortex-logo.jpg"
-            alt="WORKVORTEX Logo"
+            src="/assets/workvortex-logo.png"
+            alt="WORKVORTEX Digital Studio Logo"
+            width="32"
+            height="32"
+            decoding="async"
             className="w-8 h-8 rounded-lg object-contain shadow-xs group-hover:scale-105 transition-transform"
           />
           <div className="flex flex-col">

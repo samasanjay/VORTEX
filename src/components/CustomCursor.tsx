@@ -4,14 +4,13 @@ export const CustomCursor: React.FC = () => {
   const [position, setPosition] = useState({ x: -100, y: -100 });
   const [label, setLabel] = useState<string>('');
   const [isActive, setIsActive] = useState<boolean>(false);
-  const [isTouchDevice, setIsTouchDevice] = useState<boolean>(false);
+  const [isTouchDevice] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return 'ontouchstart' in window || (navigator.maxTouchPoints || 0) > 0;
+  });
 
   useEffect(() => {
-    // Check touch device or reduced motion
-    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-      setIsTouchDevice(true);
-      return;
-    }
+    if (isTouchDevice) return;
 
     const onMouseMove = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
@@ -35,7 +34,7 @@ export const CustomCursor: React.FC = () => {
       window.removeEventListener('mousemove', onMouseMove);
       document.body.classList.remove('cursor-active');
     };
-  }, []);
+  }, [isTouchDevice]);
 
   if (isTouchDevice) return null;
 
