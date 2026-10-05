@@ -14,7 +14,7 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-slate-200">
           
           {/* Brand Column */}
-          <div className="lg:col-span-4 space-y-4">
+          <div className="lg:col-span-5 space-y-4">
             <Link to="/" className="flex items-center gap-3" aria-label="WORKVORTEX home">
               <img
                 src="/assets/workvortex-logo.png"
@@ -38,7 +38,7 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Navigation */}
-          <div className="lg:col-span-2 space-y-3">
+          <div className="lg:col-span-3 space-y-3">
             <h3 className="text-xs font-mono uppercase tracking-wider text-slate-900 font-bold">
               Navigation
             </h3>
@@ -76,47 +76,8 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Studio Offerings & Resources */}
-          <div className="lg:col-span-3 space-y-3">
-            <h3 className="text-xs font-mono uppercase tracking-wider text-slate-900 font-bold">
-              Capabilities & Labs
-            </h3>
-            <ul className="space-y-2 text-sm text-slate-600">
-              <li>
-                <Link to="/services/website-development" className="hover:text-blue-600 transition-colors">
-                  Website Development
-                </Link>
-              </li>
-              <li>
-                <Link to="/services/web-applications-saas" className="hover:text-blue-600 transition-colors">
-                  Web Applications & SaaS
-                </Link>
-              </li>
-              <li>
-                <Link to="/services/ui-ux-design-systems" className="hover:text-blue-600 transition-colors">
-                  UI/UX & Design Systems
-                </Link>
-              </li>
-              <li>
-                <Link to="/services/business-automation-ai" className="hover:text-blue-600 transition-colors">
-                  Automation & AI Solutions
-                </Link>
-              </li>
-              <li>
-                <Link to="/ui-archive" className="hover:text-blue-600 transition-colors">
-                  UI Component Archive
-                </Link>
-              </li>
-              <li>
-                <Link to="/design-system" className="hover:text-blue-600 transition-colors">
-                  Living Design System
-                </Link>
-              </li>
-            </ul>
-          </div>
-
           {/* Connect & Legal */}
-          <div className="lg:col-span-3 space-y-3">
+          <div className="lg:col-span-4 space-y-3">
             <h3 className="text-xs font-mono uppercase tracking-wider text-slate-900 font-bold">
               Direct Contact
             </h3>
