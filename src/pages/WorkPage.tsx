@@ -1,48 +1,91 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { api } from '../services/api';
 import { PROJECTS } from '../data/projects';
 import { SEO } from '../components/SEO';
-import { buildBreadcrumbSchema, buildCollectionSchema, SITE_URL } from '../config/seo';
-import type { FilterCategory } from '../types/project';
+import { buildBreadcrumbSchema } from '../config/seo';
+import type { Project } from '../types/api';
 import { ArrowUpRight, Search, CheckCircle2, Filter } from 'lucide-react';
 
 export const WorkPage: React.FC = () => {
-  const [activeFilter, setActiveFilter] = useState<FilterCategory>('ALL');
+  const [activeFilter, setActiveFilter] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filterTabs: FilterCategory[] = [
-    'ALL',
-    'WEBSITES',
-    'WEB APPS',
-    'MOBILE APPS',
-    'SAAS',
-    'DASHBOARDS',
-    'EXPERIMENTS',
-  ];
+  useEffect(() => {
+    api
+      .getProjects({ status: 'PUBLISHED' })
+      .then((res) => {
+        if (res.projects && res.projects.length > 0) {
+          setProjects(res.projects);
+        } else {
+          // fallback to static typed dataset
+          setProjects(
+            PROJECTS.map((p) => ({
+              id: p.id,
+              slug: p.slug,
+              title: p.name,
+              category: p.category,
+              filter_tags: p.filterTags,
+              short_description: p.description,
+              type: p.type,
+              year: p.year,
+              status: 'PUBLISHED',
+              featured: 1,
+              featured_image: p.featuredImage,
+              technologies: p.technologies,
+              metrics: [],
+              color_palette: [],
+              typography: [],
+              screens: [],
+              display_order: 0,
+            }))
+          );
+        }
+      })
+      .catch(() => {
+        setProjects(
+          PROJECTS.map((p) => ({
+            id: p.id,
+            slug: p.slug,
+            title: p.name,
+            category: p.category,
+            filter_tags: p.filterTags,
+            short_description: p.description,
+            type: p.type,
+            year: p.year,
+            status: 'PUBLISHED',
+            featured: 1,
+            featured_image: p.featuredImage,
+            technologies: p.technologies,
+            metrics: [],
+            color_palette: [],
+            typography: [],
+            screens: [],
+            display_order: 0,
+          }))
+        );
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filterTabs = ['ALL', 'WEBSITES', 'SAAS', 'MOBILE', 'AUTOMATION'];
 
   const filteredProjects = useMemo(() => {
-    return PROJECTS.filter((project) => {
-      const matchesFilter = activeFilter === 'ALL' || project.filterTags.includes(activeFilter);
+    return projects.filter((project) => {
+      const matchesFilter =
+        activeFilter === 'ALL' ||
+        project.category?.toUpperCase() === activeFilter ||
+        project.filter_tags?.includes(activeFilter);
       const matchesSearch =
-        project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.technologies.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
+        project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (project.category && project.category.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        project.short_description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        project.technologies?.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
       return matchesFilter && matchesSearch;
     });
-  }, [activeFilter, searchQuery]);
-
-  const collectionSchema = buildCollectionSchema(
-    'Selected Digital Work & Product Directory',
-    'A comprehensive portfolio catalog of digital products, web applications, SaaS dashboards, and mobile experiences engineered by WORKVORTEX.',
-    `${SITE_URL}/work`,
-    PROJECTS.map((p) => ({
-      name: p.name,
-      url: `/work/${p.slug}`,
-      image: p.featuredImage,
-      description: p.description,
-    }))
-  );
+  }, [projects, activeFilter, searchQuery]);
 
   const breadcrumbSchema = buildBreadcrumbSchema([
     { name: 'Home', path: '/' },
@@ -50,17 +93,17 @@ export const WorkPage: React.FC = () => {
   ]);
 
   return (
-    <div className="pt-32 pb-24 bg-[#F8FAFC]">
+    <div className="pt-32 pb-24 bg-[#F8FAFC] font-body">
       <SEO
         title="Selected Digital Work & Product Case Studies — WORKVORTEX"
-        description="Explore the complete WORKVORTEX portfolio featuring luxury e-commerce, agile project management platforms, fintech dashboards, real estate portals, and health apps."
+        description="Explore the complete WORKVORTEX portfolio featuring luxury e-commerce, agile project management platforms, fintech dashboards, and mobile companion apps."
         canonical="/work"
-        schema={[breadcrumbSchema, collectionSchema]}
+        schema={[breadcrumbSchema]}
       />
 
       <div className="container-vortex space-y-12">
         {/* Header */}
-        <div className="max-w-3xl space-y-4">
+        <div className="max-w-3xl space-y-4 text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-xs font-mono text-blue-700 font-semibold">
             <span>PORTFOLIO DIRECTORY</span>
           </div>
@@ -113,22 +156,26 @@ export const WorkPage: React.FC = () => {
         </div>
 
         {/* Projects Grid */}
-        {filteredProjects.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {loading ? (
+          <div className="text-center py-20 text-slate-500 font-mono text-xs">
+            Loading case studies...
+          </div>
+        ) : filteredProjects.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
             {filteredProjects.map((project) => (
               <article
                 key={project.id}
-                className="group glass-card flex flex-col justify-between hover:border-blue-300 transition-all duration-300"
+                className="group card-vortex p-0 overflow-hidden flex flex-col justify-between hover:border-blue-300 transition-all duration-300"
               >
                 <div>
                   <Link
                     to={`/work/${project.slug}`}
-                    aria-label={`Open full case study for ${project.name}`}
+                    aria-label={`Open full case study for ${project.title}`}
                     className="block relative aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200"
                   >
                     <img
-                      src={project.featuredImage}
-                      alt={`${project.name} - ${project.category} case study interface screenshot`}
+                      src={project.featured_image || '/assets/projects/velora.jpg'}
+                      alt={`${project.title} - case study screenshot`}
                       width="600"
                       height="375"
                       loading="lazy"
@@ -136,19 +183,13 @@ export const WorkPage: React.FC = () => {
                       className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute top-3 left-3 z-10">
-                      <span
-                        className={
-                          project.type === 'EXPERIMENTAL CONCEPT'
-                            ? 'badge-concept text-[10px]'
-                            : 'badge-sample text-[10px]'
-                        }
-                      >
+                      <span className="badge-sample text-[10px]">
                         <CheckCircle2 className="w-3 h-3" />
-                        {project.type}
+                        <span>{project.type || 'CLIENT PROJECT'}</span>
                       </span>
                     </div>
                     <div className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-md bg-white/95 border border-slate-200 text-[10px] font-mono text-slate-700 font-semibold shadow-xs">
-                      {project.year}
+                      {project.year || '2026'}
                     </div>
                   </Link>
 
@@ -158,15 +199,15 @@ export const WorkPage: React.FC = () => {
                     </span>
                     <h2 className="font-display font-bold text-xl text-slate-900 group-hover:text-blue-600 transition-colors">
                       <Link to={`/work/${project.slug}`} className="block">
-                        {project.name}
+                        {project.title}
                       </Link>
                     </h2>
                     <p className="text-slate-600 text-xs sm:text-sm line-clamp-2 leading-relaxed">
-                      {project.description}
+                      {project.short_description}
                     </p>
 
                     <div className="flex flex-wrap gap-1.5 pt-2">
-                      {project.technologies.slice(0, 3).map((tech) => (
+                      {project.technologies?.slice(0, 3).map((tech) => (
                         <span key={tech} className="badge-tech text-[11px]">
                           {tech}
                         </span>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUp, ArrowUpRight } from 'lucide-react';
+import { ArrowUp, Shield } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const scrollToTop = () => {
@@ -8,12 +8,12 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-[#F8FAFC] border-t border-slate-200 text-left pt-16 pb-12">
+    <footer className="bg-[#F8FAFC] border-t border-slate-200 text-left pt-16 pb-12 font-body">
       <div className="container-vortex space-y-12">
         {/* Main Footer Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-slate-200">
           
-          {/* Brand Info */}
+          {/* Brand Column */}
           <div className="lg:col-span-4 space-y-4">
             <Link to="/" className="flex items-center gap-3" aria-label="WORKVORTEX home">
               <img
@@ -29,7 +29,7 @@ export const Footer: React.FC = () => {
               </span>
             </Link>
             <p className="text-sm text-slate-600 font-body max-w-sm leading-relaxed">
-              High-performance digital products, web applications, user interfaces, and mobile experiences crafted with modern design systems.
+              High-performance digital products, web applications, user interfaces, SaaS platforms, and business automation solutions engineered with React 19 and TypeScript.
             </p>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-xs font-mono text-blue-700 font-semibold">
               <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
@@ -37,7 +37,7 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Navigation Column */}
+          {/* Navigation */}
           <div className="lg:col-span-2 space-y-3">
             <h3 className="text-xs font-mono uppercase tracking-wider text-slate-900 font-bold">
               Navigation
@@ -54,13 +54,18 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/ui-archive" className="hover:text-blue-600 transition-colors">
-                  UI Archive
+                <Link to="/services" className="hover:text-blue-600 transition-colors">
+                  Services Catalog
                 </Link>
               </li>
               <li>
-                <Link to="/design-system" className="hover:text-blue-600 transition-colors">
-                  Design System
+                <Link to="/process" className="hover:text-blue-600 transition-colors">
+                  Engineering Process
+                </Link>
+              </li>
+              <li>
+                <Link to="/technology" className="hover:text-blue-600 transition-colors">
+                  Technology Stack
                 </Link>
               </li>
               <li>
@@ -68,90 +73,121 @@ export const Footer: React.FC = () => {
                   About Studio
                 </Link>
               </li>
-              <li>
-                <Link to="/contact" className="hover:text-blue-600 transition-colors font-medium text-blue-600">
-                  Start a Project →
-                </Link>
-              </li>
             </ul>
           </div>
 
-          {/* Projects Column */}
+          {/* Studio Offerings & Resources */}
           <div className="lg:col-span-3 space-y-3">
             <h3 className="text-xs font-mono uppercase tracking-wider text-slate-900 font-bold">
-              Featured Projects
+              Capabilities & Labs
             </h3>
             <ul className="space-y-2 text-sm text-slate-600">
               <li>
-                <Link to="/work/velora" className="hover:text-blue-600 transition-colors flex items-center justify-between group">
-                  <span>Velora E-Commerce</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <Link to="/services/website-development" className="hover:text-blue-600 transition-colors">
+                  Website Development
                 </Link>
               </li>
               <li>
-                <Link to="/work/taskflow" className="hover:text-blue-600 transition-colors flex items-center justify-between group">
-                  <span>Taskflow Management</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <Link to="/services/web-applications-saas" className="hover:text-blue-600 transition-colors">
+                  Web Applications & SaaS
                 </Link>
               </li>
               <li>
-                <Link to="/work/finmate" className="hover:text-blue-600 transition-colors flex items-center justify-between group">
-                  <span>Finmate Dashboard</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <Link to="/services/ui-ux-design-systems" className="hover:text-blue-600 transition-colors">
+                  UI/UX & Design Systems
                 </Link>
               </li>
               <li>
-                <Link to="/work/homora" className="hover:text-blue-600 transition-colors flex items-center justify-between group">
-                  <span>Homora Real Estate</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <Link to="/services/business-automation-ai" className="hover:text-blue-600 transition-colors">
+                  Automation & AI Solutions
                 </Link>
               </li>
               <li>
-                <Link to="/work/fittrack" className="hover:text-blue-600 transition-colors flex items-center justify-between group">
-                  <span>FitTrack Mobile App</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <Link to="/ui-archive" className="hover:text-blue-600 transition-colors">
+                  UI Component Archive
+                </Link>
+              </li>
+              <li>
+                <Link to="/design-system" className="hover:text-blue-600 transition-colors">
+                  Living Design System
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Quick Contact & Studio Location */}
+          {/* Connect & Legal */}
           <div className="lg:col-span-3 space-y-3">
             <h3 className="text-xs font-mono uppercase tracking-wider text-slate-900 font-bold">
-              Studio Inquiry
+              Direct Contact
             </h3>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Have a product design, web application, or interface concept in mind? Let’s architect something exceptional.
-            </p>
-            <div className="space-y-2 pt-1">
-              <a
-                href="mailto:workvortex01@gmail.com"
-                className="text-xs font-mono text-blue-600 hover:underline block font-semibold"
-              >
-                workvortex01@gmail.com
-              </a>
-              <Link to="/contact" className="btn-primary text-xs py-2 px-4 inline-flex">
-                <span>Inquire Now</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </Link>
+            <div className="space-y-2 text-sm text-slate-600">
+              <p>
+                Inquiries:{' '}
+                <a
+                  href="mailto:workvortex01@gmail.com"
+                  className="font-medium text-blue-600 hover:underline block"
+                >
+                  workvortex01@gmail.com
+                </a>
+              </p>
+              <p>
+                Phone:{' '}
+                <a
+                  href="tel:7988021741"
+                  className="font-medium text-slate-800 hover:text-blue-600 hover:underline"
+                >
+                  +91 7988021741
+                </a>
+              </p>
+              <p className="text-xs text-slate-500 font-mono">
+                Response within 24 hours with custom scope proposal.
+              </p>
+              <div className="pt-2">
+                <Link
+                  to="/contact"
+                  className="btn-primary text-xs py-2 px-4 inline-flex items-center gap-1.5 shadow-sm"
+                >
+                  <span>Start a Project →</span>
+                </Link>
+              </div>
             </div>
           </div>
-
         </div>
 
-        {/* Bottom Bar with Back to Top */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs font-mono text-slate-500">
+        {/* Bottom Bar */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-500">
           <div>
-            © 2026 WORKVORTEX. All rights reserved. Transparent Portfolio & Digital Showcase.
+            © {new Date().getFullYear()} WORKVORTEX Digital Studio. Engineered with React 19, TypeScript & Three.js.
           </div>
-          <button
-            onClick={scrollToTop}
-            className="p-2.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors self-start sm:self-auto shadow-xs flex items-center gap-1.5 cursor-pointer"
-            aria-label="Back to top of page"
-          >
-            <span>Back to top</span>
-            <ArrowUp className="w-3.5 h-3.5" />
-          </button>
+
+          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-4 gap-y-2">
+            <Link to="/faq" className="hover:text-slate-900 transition-colors">
+              FAQ
+            </Link>
+            <Link to="/privacy-policy" className="hover:text-slate-900 transition-colors">
+              Privacy Policy
+            </Link>
+            <Link to="/terms" className="hover:text-slate-900 transition-colors">
+              Terms & Conditions
+            </Link>
+            <Link to="/refund-policy" className="hover:text-slate-900 transition-colors">
+              Cancellation & Refund Policy
+            </Link>
+            <Link
+              to="/admin/login"
+              className="hover:text-blue-600 transition-colors flex items-center gap-1"
+            >
+              <Shield className="w-3 h-3 text-slate-400" />
+              <span>Admin Portal</span>
+            </Link>
+            <button
+              onClick={scrollToTop}
+              className="p-1.5 rounded-lg bg-slate-200/70 hover:bg-slate-300 text-slate-700 transition-colors ml-1 cursor-pointer"
+              aria-label="Scroll back to top"
+            >
+              <ArrowUp className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
       </div>
     </footer>

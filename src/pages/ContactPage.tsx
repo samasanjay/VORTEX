@@ -1,104 +1,86 @@
 import React, { useState } from 'react';
 import {
   Mail,
-  Clock,
-  Send,
   CheckCircle2,
   ArrowRight,
   Loader2,
   ExternalLink,
   MessageSquare,
   Sparkles,
-  IndianRupee
+  ShieldCheck
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { SEO } from '../components/SEO';
 import { buildBreadcrumbSchema, buildContactSchema } from '../config/seo';
-import type { ContactFormData } from '../utils/sendEmail';
-import {
-  sendInquiryEmail,
-  generateMailtoLink,
-  generateWhatsAppLink
-} from '../utils/sendEmail';
+import { api } from '../services/api';
+import { generateMailtoLink, generateWhatsAppLink } from '../utils/sendEmail';
 
 export const ContactPage: React.FC = () => {
   const projectTypes = [
-    'Basic Business Website',
-    'Professional Business Website',
-    'E-commerce Website',
-    'Website + Lead System',
-    'Basic Business Automation',
-    'AI Chatbot / AI Solutions',
-    'Logo & Branding',
-    'Small Landing Page',
-    'Custom / Complex Projects',
+    'Custom Website Development',
+    'Web Applications & SaaS',
+    'UI/UX & Design Systems',
+    'Business Automation & AI',
+    'E-commerce Storefront',
+    'Mobile Application MVP',
+    'Custom / Enterprise System',
   ];
 
   const budgetOptionsMap: Record<string, string[]> = {
-    'Basic Business Website': [
-      '₹4,000 – ₹6,000 / $48 – $72 (Starter 1–3 Pages)',
-      '₹6,000 – ₹8,000 / $72 – $95 (Complete Basic Business Web)',
+    'Custom Website Development': [
+      '₹4,000 – ₹8,000 / $48 – $95 (Starter Flagship)',
+      '₹7,000 – ₹12,000 / $85 – $145 (Professional Multi-Page)',
       'Flexible / Open for Discussion',
     ],
-    'Professional Business Website': [
-      '₹7,000 – ₹9,500 / $85 – $115 (Standard Multi-Page Business Web)',
-      '₹9,500 – ₹12,000 / $115 – $145 (Premium Custom Business Portal)',
+    'Web Applications & SaaS': [
+      '₹15,000 – ₹22,000 / $180 – $265 (Custom Web App MVP)',
+      '₹22,000 – ₹30,000+ / $265 – $360+ (Full SaaS Architecture & Database)',
       'Flexible / Open for Discussion',
     ],
-    'E-commerce Website': [
-      '₹10,000 – ₹14,000 / $120 – $170 (Starter Online Store + Payment Gateway)',
-      '₹14,000 – ₹18,000 / $170 – $220 (Full Product Catalog + Cart & Orders)',
+    'UI/UX & Design Systems': [
+      '₹5,000 – ₹7,500 / $60 – $90 (Figma Design Kit)',
+      '₹7,500 – ₹10,000 / $90 – $120 (Complete Interactive Design System)',
       'Flexible / Open for Discussion',
     ],
-    'Website + Lead System': [
-      '₹10,000 – ₹14,000 / $120 – $170 (High-Conversion Lead Funnel)',
-      '₹14,000 – ₹18,000 / $170 – $220 (Complete Lead Engine + CRM Alerts)',
-      'Flexible / Open for Discussion',
-    ],
-    'Basic Business Automation': [
-      '₹5,000 – ₹7,500 / $60 – $90 (Workflow Automation & Lead Sync)',
-      '₹7,500 – ₹10,000 / $90 – $120 (Multi-App Integration & WhatsApp/Email)',
-      'Flexible / Open for Discussion',
-    ],
-    'AI Chatbot / AI Solutions': [
+    'Business Automation & AI': [
       '₹8,000 – ₹13,000 / $95 – $155 (Smart Website AI Assistant)',
-      '₹13,000 – ₹18,000 / $155 – $220 (Custom Knowledge Base & Lead Bot)',
+      '₹13,000 – ₹18,000 / $155 – $220 (Custom Knowledge Base & CRM Lead Bot)',
       'Flexible / Open for Discussion',
     ],
-    'Logo & Branding': [
-      '₹2,500 – ₹4,000 / $30 – $48 (Core Logo & Color Palette)',
-      '₹4,000 – ₹6,000 / $48 – $72 (Complete Brand Identity & Guidelines)',
+    'E-commerce Storefront': [
+      '₹10,000 – ₹14,000 / $120 – $170 (Starter Online Store + Cart Drawer)',
+      '₹14,000 – ₹18,000 / $170 – $220 (Full Product Catalog + Checkout Tokenization)',
       'Flexible / Open for Discussion',
     ],
-    'Small Landing Page': [
-      '₹3,000 – ₹4,500 / $36 – $55 (Single-Product / Promo Page)',
-      '₹4,500 – ₹6,000 / $55 – $72 (Interactive High-Speed Landing Page)',
+    'Mobile Application MVP': [
+      '₹15,000 – ₹25,000 / $180 – $300 (React Native Companion App)',
       'Flexible / Open for Discussion',
     ],
-    'Custom / Complex Projects': [
-      '₹15,000 – ₹22,000 / $180 – $265 (Custom Web App / Portal MVP)',
-      '₹22,000 – ₹30,000+ / $265 – $360+ (Full Custom System & Database)',
+    'Custom / Enterprise System': [
+      '₹25,000 – ₹50,000+ / $300 – $600+ (Full Relational Portal)',
       'Flexible / Open for Discussion',
     ],
   };
 
-  const [formData, setFormData] = useState<ContactFormData>({
+  const [formData, setFormData] = useState({
     name: '',
     email: '',
     company: '',
     phone: '',
-    projectType: 'Basic Business Website',
-    budgetRange: '₹4,000 – ₹6,000 / $48 – $72 (Starter 1–3 Pages)',
-    timeline: '1–3 months',
+    website: '',
+    projectType: 'Custom Website Development',
+    budgetRange: '₹7,000 – ₹12,000 / $85 – $145 (Professional Multi-Page)',
+    timeline: '1–2 Weeks',
     message: '',
+    additionalInfo: '',
   });
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
-  const [statusMessage, setStatusMessage] = useState<string>('');
+  const [submissionResult, setSubmissionResult] = useState<any>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleProjectTypeSelect = (type: string) => {
-    const options = budgetOptionsMap[type] || budgetOptionsMap['Basic Business Website'];
+    const options = budgetOptionsMap[type] || budgetOptionsMap['Custom Website Development'];
     setFormData((prev) => ({
       ...prev,
       projectType: type,
@@ -106,29 +88,31 @@ export const ContactPage: React.FC = () => {
     }));
   };
 
-  const timelineOptions = ['< 1 month', '1–3 months', '3–6 months', 'Flexible'];
+  const timelineOptions = ['< 1 week (Fast Kickoff)', '1–2 Weeks', '2–4 Weeks', '1–2 Months', 'Flexible'];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) return;
+    if (!formData.name || !formData.email || !formData.message) {
+      setErrorMsg('Please complete all required fields.');
+      return;
+    }
 
     setIsSubmitting(true);
-    setStatusMessage('Transmitting inquiry to studio inbox...');
+    setErrorMsg(null);
 
     try {
-      const response = await sendInquiryEmail(formData);
+      const response = await api.submitLead(formData);
       setIsSubmitting(false);
       setSubmitted(true);
-      setStatusMessage(response.message);
-    } catch {
+      setSubmissionResult(response);
+    } catch (err: any) {
       setIsSubmitting(false);
-      setSubmitted(true);
-      setStatusMessage('Inquiry prepared. Mail application fallback ready.');
+      setErrorMsg(err.message || 'Transmission failed. You can use the direct email client fallback below.');
     }
   };
 
-  const mailtoUrl = generateMailtoLink(formData);
-  const whatsappUrl = generateWhatsAppLink(formData);
+  const mailtoUrl = generateMailtoLink(formData as any);
+  const whatsappUrl = generateWhatsAppLink(formData as any);
 
   const breadcrumbSchema = buildBreadcrumbSchema([
     { name: 'Home', path: '/' },
@@ -138,10 +122,10 @@ export const ContactPage: React.FC = () => {
   const contactSchema = buildContactSchema();
 
   return (
-    <div className="pt-32 pb-24 bg-[#F8FAFC]">
+    <div className="pt-32 pb-24 bg-[#F8FAFC] font-body">
       <SEO
-        title="Start a Project & Pricing Calculator — WORKVORTEX Studio"
-        description="Request a digital product consultation with WORKVORTEX. Transparent pricing estimates for web applications, SaaS dashboards, e-commerce, and design systems."
+        title="Start a Project & AI Pricing Estimator — WORKVORTEX Studio"
+        description="Request a digital product consultation with WORKVORTEX. Instant scope estimation, transparent starting pricing, and 24-hour proposal turnaround."
         canonical="/contact"
         schema={[breadcrumbSchema, contactSchema]}
       />
@@ -149,371 +133,327 @@ export const ContactPage: React.FC = () => {
       <div className="container-vortex space-y-16">
         
         {/* Header */}
-        <header className="max-w-3xl space-y-4">
+        <header className="max-w-3xl space-y-4 text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-xs font-mono text-blue-700 font-semibold">
             <Mail className="w-3.5 h-3.5" />
             <span>START A PROJECT INQUIRY</span>
           </div>
-          <h1 className="font-display font-extrabold text-4xl sm:text-6xl text-slate-900 tracking-tight">
-            LET’S BUILD SOMETHING GREAT.
+          <h1 className="font-display font-extrabold text-4xl sm:text-6xl text-slate-900 tracking-tight leading-tight">
+            LET’S BUILD SOMETHING EXTRAORDINARY.
           </h1>
           <p className="text-slate-600 font-body text-base sm:text-lg leading-relaxed">
-            Fill in your project requirements below. Your inquiry will be transmitted directly to our studio inbox, and our engineering team will get back to you within 24 hours.
+            Fill in your project requirements below. Our backend AI evaluation engine will process your scope, generate an estimated price dossier, and alert our engineering team for a 24-hour proposal turnaround.
           </p>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
-          {/* Left Column: Interactive Form */}
-          <section aria-label="Inquiry Form" className="lg:col-span-7 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-sm">
+          {/* Left Column: Inquiry Form */}
+          <section aria-label="Inquiry Form" className="lg:col-span-7 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-sm text-left">
             {submitted ? (
-              <div className="py-8 space-y-8">
+              <div className="py-6 space-y-8">
                 <div className="text-center space-y-3">
                   <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center mx-auto shadow-sm">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
                   <h2 className="font-display font-bold text-2xl sm:text-3xl text-slate-900">
-                    Inquiry Sent Successfully!
+                    Inquiry Received Successfully!
                   </h2>
-                  {statusMessage && (
-                    <div className="inline-block px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-mono text-emerald-700 font-semibold">
-                      {statusMessage}
-                    </div>
-                  )}
+                  <div className="inline-block px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-mono text-emerald-700 font-semibold">
+                    Reference ID: {submissionResult?.leadId || 'VORTEX-LEAD'}
+                  </div>
                   <p className="text-slate-600 text-sm max-w-md mx-auto leading-relaxed">
-                    Thank you, <strong className="text-slate-900">{formData.name}</strong>. We have received your project details and a team member will review your requirements and reach out via <strong className="text-slate-900">{formData.email}</strong>.
+                    Thank you, <strong className="text-slate-900">{formData.name}</strong>. Our engineering squad has received your inquiry and will follow up at <strong className="text-slate-900">{formData.email}</strong> within 24 hours.
                   </p>
                 </div>
 
-                {/* Submitted Summary Box */}
-                <div className="p-6 rounded-2xl bg-[#F8FAFC] border border-slate-200 space-y-3 text-left">
-                  <span className="text-xs font-mono uppercase tracking-wider text-blue-600 font-bold block">
-                    Inquiry Summary Transmitted:
-                  </span>
-                  <div className="grid grid-cols-2 gap-3 text-xs">
-                    <div>
-                      <span className="text-slate-400 block font-mono">CLIENT</span>
-                      <span className="font-semibold text-slate-800">{formData.name} ({formData.company || 'Individual'})</span>
-                    </div>
-                    <div>
-                      <span className="text-slate-400 block font-mono">EMAIL</span>
-                      <span className="font-semibold text-slate-800">{formData.email}</span>
-                    </div>
-                    <div>
-                      <span className="text-slate-400 block font-mono">PROJECT TYPE</span>
-                      <span className="font-semibold text-slate-800">{formData.projectType}</span>
-                    </div>
-                    <div>
-                      <span className="text-slate-400 block font-mono">TIMELINE / BUDGET</span>
-                      <span className="font-semibold text-slate-800">{formData.timeline} • {formData.budgetRange}</span>
+                {/* Scope & Pricing Estimation Pill */}
+                {submissionResult?.qualification && (
+                  <div className="p-6 rounded-2xl bg-blue-50/60 border border-blue-200/80 space-y-3">
+                    <span className="text-xs font-mono uppercase tracking-wider text-blue-700 font-bold block flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                      <span>Estimated Scope & Benchmark:</span>
+                    </span>
+                    <div className="grid grid-cols-2 gap-4 text-xs font-mono">
+                      <div>
+                        <span className="text-slate-500 block text-[11px]">RECOMMENDED SERVICE</span>
+                        <span className="font-bold text-slate-900 text-sm">
+                          {submissionResult.qualification.recommendedService}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-slate-500 block text-[11px]">ESTIMATED STARTING BUDGET</span>
+                        <span className="font-bold text-emerald-700 text-sm">
+                          {submissionResult.qualification.estimatedPricing?.inr}
+                        </span>
+                        <span className="text-slate-500 block text-[10.5px]">
+                          ({submissionResult.qualification.estimatedPricing?.usd})
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  <div className="pt-2 border-t border-slate-200">
-                    <span className="text-slate-400 block font-mono text-[11px]">MESSAGE</span>
-                    <p className="text-xs text-slate-700 italic line-clamp-3">"{formData.message}"</p>
-                  </div>
-                </div>
+                )}
 
                 {/* Direct Alternative Options */}
                 <div className="space-y-3 pt-2">
                   <span className="text-xs font-mono text-slate-500 block text-center font-medium">
-                    Optional: Open inquiry in your email client or WhatsApp
+                    Optional: Connect directly via WhatsApp or Email
                   </span>
-                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                    <a
-                      href={mailtoUrl}
-                      className="btn-secondary w-full sm:w-auto text-xs py-2.5 px-4 justify-center flex items-center gap-2"
-                      title="Open in default mail client"
-                    >
-                      <Mail className="w-3.5 h-3.5 text-blue-600" />
-                      <span>Open in Mail App</span>
-                      <ExternalLink className="w-3 h-3 text-slate-400" />
-                    </a>
-
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <a
                       href={whatsappUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn-secondary w-full sm:w-auto text-xs py-2.5 px-4 justify-center flex items-center gap-2"
-                      title="Send via WhatsApp"
+                      className="py-3 px-4 rounded-xl border border-slate-200 hover:border-emerald-400 bg-white hover:bg-emerald-50 text-slate-800 text-xs font-mono font-semibold flex items-center justify-center gap-2 transition-all shadow-xs"
                     >
-                      <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>Message on WhatsApp</span>
+                      <MessageSquare className="w-4 h-4 text-emerald-600" />
+                      <span>WhatsApp Direct Chat</span>
+                      <ExternalLink className="w-3 h-3 text-slate-400" />
+                    </a>
+                    <a
+                      href={mailtoUrl}
+                      className="py-3 px-4 rounded-xl border border-slate-200 hover:border-blue-400 bg-white hover:bg-blue-50 text-slate-800 text-xs font-mono font-semibold flex items-center justify-center gap-2 transition-all shadow-xs"
+                    >
+                      <Mail className="w-4 h-4 text-blue-600" />
+                      <span>Open in Mail Client</span>
                       <ExternalLink className="w-3 h-3 text-slate-400" />
                     </a>
                   </div>
                 </div>
 
-                {/* Reset or explore actions */}
-                <div className="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-center gap-3">
+                <div className="text-center pt-2">
                   <button
                     onClick={() => {
                       setSubmitted(false);
-                      setFormData({
-                        name: '',
-                        email: '',
-                        company: '',
-                        phone: '',
-                        projectType: 'Basic Business Website',
-                        budgetRange: '₹4,000 – ₹6,000 / $48 – $72 (Starter 1–3 Pages)',
-                        timeline: '1–3 months',
-                        message: '',
-                      });
+                      setSubmissionResult(null);
                     }}
-                    className="text-xs font-mono font-semibold text-slate-600 hover:text-slate-900 py-2 px-3 rounded-lg hover:bg-slate-100 cursor-pointer"
+                    className="text-xs font-mono text-blue-600 hover:underline cursor-pointer"
                   >
-                    Submit Another Inquiry
+                    ← Submit another project inquiry
                   </button>
-                  <Link to="/work" className="btn-primary text-xs py-2 px-5">
-                    <span>Browse Portfolio</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
                 </div>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                
-                {/* Name and Email */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label htmlFor="name-input" className="text-xs font-mono font-semibold text-slate-700 block">
-                      Your Name *
-                    </label>
-                    <input
-                      id="name-input"
-                      type="text"
-                      required
-                      placeholder="e.g. Alex Rivera"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
-                    />
+              <form onSubmit={handleSubmit} className="space-y-8">
+                {errorMsg && (
+                  <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-mono">
+                    {errorMsg}
                   </div>
+                )}
 
-                  <div className="space-y-1.5">
-                    <label htmlFor="email-input" className="text-xs font-mono font-semibold text-slate-700 block">
-                      Email Address *
-                    </label>
-                    <input
-                      id="email-input"
-                      type="email"
-                      required
-                      placeholder="alex@company.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
-                    />
-                  </div>
-                </div>
-
-                {/* Company and Phone */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label htmlFor="company-input" className="text-xs font-mono font-semibold text-slate-700 block">
-                      Company / Organization
-                    </label>
-                    <input
-                      id="company-input"
-                      type="text"
-                      placeholder="e.g. Acme Studio"
-                      value={formData.company}
-                      onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label htmlFor="phone-input" className="text-xs font-mono font-semibold text-slate-700 block">
-                      Phone / WhatsApp (Optional)
-                    </label>
-                    <input
-                      id="phone-input"
-                      type="text"
-                      placeholder="+1 (555) 000-0000"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
-                    />
-                  </div>
-                </div>
-
-                {/* Project Focus Selection */}
-                <div className="space-y-2">
-                  <label className="text-xs font-mono font-semibold text-slate-700 block">
-                    Project Type & Focus
+                {/* 1. Project Type Chips */}
+                <div className="space-y-3">
+                  <label className="block text-xs font-mono uppercase tracking-wider text-slate-900 font-bold">
+                    1. Select Primary Focus *
                   </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {projectTypes.map((type) => (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {projectTypes.map((type) => {
+                      const isSelected = formData.projectType === type;
+                      return (
+                        <button
+                          key={type}
+                          type="button"
+                          onClick={() => handleProjectTypeSelect(type)}
+                          className={`p-3 rounded-xl text-left text-xs font-mono transition-all cursor-pointer flex items-center justify-between ${
+                            isSelected
+                              ? 'bg-blue-50 border-2 border-blue-600 text-blue-900 font-bold shadow-xs'
+                              : 'bg-slate-50/70 border border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300'
+                          }`}
+                        >
+                          <span>{type}</span>
+                          {isSelected && <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 2. Budget Selection */}
+                <div className="space-y-3">
+                  <label className="block text-xs font-mono uppercase tracking-wider text-slate-900 font-bold">
+                    2. Estimated Budget Target *
+                  </label>
+                  <select
+                    value={formData.budgetRange}
+                    onChange={(e) => setFormData({ ...formData, budgetRange: e.target.value })}
+                    className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs font-mono text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
+                  >
+                    {(budgetOptionsMap[formData.projectType] || budgetOptionsMap['Custom Website Development']).map(
+                      (opt) => (
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
+                      )
+                    )}
+                  </select>
+                </div>
+
+                {/* 3. Timeline */}
+                <div className="space-y-3">
+                  <label className="block text-xs font-mono uppercase tracking-wider text-slate-900 font-bold">
+                    3. Target Delivery Timeline *
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {timelineOptions.map((tl) => (
                       <button
+                        key={tl}
                         type="button"
-                        key={type}
-                        onClick={() => handleProjectTypeSelect(type)}
-                        className={`p-2.5 rounded-xl text-left text-xs font-medium border transition-colors cursor-pointer ${
-                          formData.projectType === type
-                            ? 'bg-blue-50 border-blue-300 text-blue-700 font-semibold shadow-xs'
-                            : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
+                        onClick={() => setFormData({ ...formData, timeline: tl })}
+                        className={`p-2.5 rounded-xl text-center text-xs font-mono transition-all cursor-pointer ${
+                          formData.timeline === tl
+                            ? 'bg-blue-600 text-white font-bold shadow-xs'
+                            : 'bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100'
                         }`}
                       >
-                        {type}
+                        {tl}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                {/* Budget Range & Timeline Row */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Budget */}
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <label htmlFor="budget-select" className="text-xs font-mono font-semibold text-slate-700 flex items-center gap-1">
-                        <IndianRupee className="w-3.5 h-3.5 text-slate-500" />
-                        <span>Budget Estimate (INR ₹ / USD $)</span>
-                      </label>
+                {/* 4. Client Contact Details */}
+                <div className="space-y-4 pt-2 border-t border-slate-100">
+                  <label className="block text-xs font-mono uppercase tracking-wider text-slate-900 font-bold">
+                    4. Contact & Organization Details *
+                  </label>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-mono text-slate-600 mb-1">Your Name *</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder="e.g. Marcus Vance"
+                        className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white"
+                      />
                     </div>
-                    <select
-                      id="budget-select"
-                      value={formData.budgetRange}
-                      onChange={(e) => setFormData({ ...formData, budgetRange: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white"
-                    >
-                      {(budgetOptionsMap[formData.projectType] || budgetOptionsMap['Basic Business Website']).map((b) => (
-                        <option key={b} value={b}>
-                          {b}
-                        </option>
-                      ))}
-                    </select>
+
+                    <div>
+                      <label className="block text-xs font-mono text-slate-600 mb-1">Corporate Email *</label>
+                      <input
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        placeholder="marcus@company.com"
+                        className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white"
+                      />
+                    </div>
                   </div>
 
-                  {/* Timeline */}
-                  <div className="space-y-2">
-                    <label htmlFor="timeline-select" className="text-xs font-mono font-semibold text-slate-700 flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-slate-500" />
-                      <span>Estimated Timeline</span>
-                    </label>
-                    <select
-                      id="timeline-select"
-                      value={formData.timeline}
-                      onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white"
-                    >
-                      {timelineOptions.map((t) => (
-                        <option key={t} value={t}>
-                          {t}
-                        </option>
-                      ))}
-                    </select>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-mono text-slate-600 mb-1">Company / Studio</label>
+                      <input
+                        type="text"
+                        value={formData.company}
+                        onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                        placeholder="Company Name"
+                        className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-mono text-slate-600 mb-1">Phone / WhatsApp</label>
+                      <input
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        placeholder="+91 98765 43210"
+                        className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white"
+                      />
+                    </div>
                   </div>
                 </div>
 
-                {/* Message Textarea */}
-                <div className="space-y-1.5">
-                  <label htmlFor="message-textarea" className="text-xs font-mono font-semibold text-slate-700 block">
-                    Project Requirements & Deliverables *
+                {/* 5. Project Description */}
+                <div className="space-y-3 pt-2 border-t border-slate-100">
+                  <label className="block text-xs font-mono uppercase tracking-wider text-slate-900 font-bold">
+                    5. Project Requirements & Goals *
                   </label>
                   <textarea
-                    id="message-textarea"
                     rows={4}
                     required
-                    placeholder="Describe your project goals, target audience, preferred technologies, and specific features needed..."
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
+                    placeholder="Describe your product requirements, target audience, key pain points, or reference websites..."
+                    className="w-full p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white leading-relaxed"
                   />
                 </div>
 
-                {/* Submit Action */}
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="btn-primary w-full py-3 justify-center text-sm font-semibold shadow-md disabled:opacity-75 cursor-pointer"
+                  className="btn-primary w-full py-3.5 text-sm font-semibold flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 disabled:opacity-50 cursor-pointer"
                 >
                   {isSubmitting ? (
-                    <span className="flex items-center gap-2">
+                    <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Transmitting Inquiry...</span>
-                    </span>
+                      <span>Transmitting & AI Evaluating Scope...</span>
+                    </>
                   ) : (
-                    <span className="flex items-center gap-2">
-                      <span>Send Project Inquiry Directly</span>
-                      <Send className="w-4 h-4" />
-                    </span>
+                    <>
+                      <span>Transmit Project Inquiry</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
                   )}
                 </button>
-
-                <p className="text-[11px] font-mono text-slate-400 text-center">
-                  Protected by SSL • Direct delivery to studio inbox • NDA upon request
-                </p>
               </form>
             )}
           </section>
 
-          {/* Right Column: Studio Information & Direct Email */}
-          <aside aria-label="Studio Contact Information" className="lg:col-span-5 space-y-6">
-            
-            <div className="p-8 rounded-3xl bg-white border border-slate-200 space-y-6 shadow-sm">
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-blue-600" />
-                <h2 className="font-display font-bold text-xl text-slate-900">
-                  Direct Studio Inbox
-                </h2>
-              </div>
+          {/* Right Column: Studio Guarantee & Contacts */}
+          <aside className="lg:col-span-5 space-y-6 text-left">
+            <div className="bg-white p-7 rounded-3xl border border-slate-200 shadow-sm space-y-5">
+              <h2 className="font-display font-bold text-xl text-slate-900">
+                Direct Studio Contact
+              </h2>
 
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <div className="p-2.5 rounded-xl bg-blue-50 text-blue-600 border border-blue-200 mt-0.5">
-                    <Mail className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <span className="text-xs font-mono text-slate-500 block uppercase">Project Inquiries</span>
-                    <a
-                      href="mailto:workvortex01@gmail.com"
-                      className="text-sm font-semibold text-blue-600 hover:underline"
-                    >
-                      workvortex01@gmail.com
-                    </a>
-                  </div>
+              <div className="space-y-3 text-xs font-mono">
+                <div className="space-y-1">
+                  <span className="text-slate-500">Official Inquiry Inbox:</span>
+                  <a href="mailto:workvortex01@gmail.com" className="font-bold text-blue-600 hover:underline block text-sm">
+                    workvortex01@gmail.com
+                  </a>
                 </div>
 
-                <div className="flex items-start gap-3">
-                  <div className="p-2.5 rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-200 mt-0.5">
-                    <Clock className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <span className="text-xs font-mono text-slate-500 block uppercase">Response Commitment</span>
-                    <span className="text-sm font-semibold text-slate-900">Within 24 business hours</span>
-                  </div>
+                <div className="space-y-1 pt-2 border-t border-slate-100">
+                  <span className="text-slate-500">Fast Response Guarantee:</span>
+                  <p className="text-slate-700 font-semibold">Within 24 Hours with Scope Dossier</p>
                 </div>
-              </div>
 
-              <div className="pt-4 border-t border-slate-100">
-                <span className="text-xs font-mono text-slate-500 font-semibold block mb-2">
-                  Preferred Project Scopes:
-                </span>
-                <div className="flex flex-wrap gap-1.5">
-                  <span className="badge-tech text-[11px]">Web Applications</span>
-                  <span className="badge-tech text-[11px]">SaaS Dashboards</span>
-                  <span className="badge-tech text-[11px]">Design Systems</span>
-                  <span className="badge-tech text-[11px]">Mobile Apps</span>
+                <div className="space-y-1 pt-2 border-t border-slate-100">
+                  <span className="text-slate-500">Engagement Milestone Terms:</span>
+                  <p className="text-slate-700 font-semibold">50% Deposit upon Kickoff / 50% upon QA Release</p>
                 </div>
               </div>
             </div>
 
-            <div className="p-8 rounded-3xl bg-slate-100/70 border border-slate-200 space-y-3">
-              <span className="text-xs font-mono text-blue-600 uppercase font-bold">
-                Engagement Model
-              </span>
-              <h3 className="font-display font-bold text-lg text-slate-900">
-                End-to-End Product Sprints
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                We take ideas from wireframes and product architecture to interactive prototypes, component systems, and production frontend code with clear milestone deliverables.
-              </p>
+            {/* Guarantees */}
+            <div className="bg-gradient-to-br from-slate-900 to-blue-950 text-white p-7 rounded-3xl space-y-4">
+              <div className="flex items-center gap-2 text-xs font-mono text-blue-300 font-bold uppercase">
+                <ShieldCheck className="w-4 h-4 text-blue-400" />
+                <span>The WORKVORTEX Guarantee</span>
+              </div>
+              <ul className="space-y-3 text-xs text-slate-300">
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span>100% intellectual property & source code ownership</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Sub-second Core Web Vitals speed target</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Strict TypeScript compilation with zero debt</span>
+                </li>
+              </ul>
             </div>
-
           </aside>
-
         </div>
-
       </div>
     </div>
   );
