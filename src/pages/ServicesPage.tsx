@@ -46,6 +46,10 @@ export const ServicesPage: React.FC = () => {
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl">
             From bespoke corporate flagships to multi-tenant cloud architectures, every solution is custom-coded in React 19, TypeScript, and modern CSS with transparent pricing and fast turnaround times.
           </p>
+
+          <div className="p-4 rounded-xl bg-blue-50/80 border border-blue-200/80 text-xs sm:text-sm text-slate-800 font-medium leading-relaxed max-w-3xl">
+            All our services start from Rs.5000/- and ends approximately around Rs 1,00,000/-. Depending upon the requirements and needs from the customer end.
+          </div>
         </div>
       </section>
 
